@@ -1,0 +1,12 @@
+client/app/release/*
+client/.idea/*
+server/src/main/webapp/ext/*
+spedition/untitled/target/*
+*.war
+*.war
+checkman3/.idea
+checkman3/out
+checkman3/target
+checkman3/src/main/web/external
+spedition2/server/.idea
+

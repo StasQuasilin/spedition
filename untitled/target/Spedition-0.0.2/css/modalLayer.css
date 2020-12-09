@@ -1,0 +1,35 @@
+.modal-layer{
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(178, 178, 178, 0.9);
+}
+.modal-body{
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    left: 0;
+    right: 0;
+    width: fit-content;
+    height: fit-content;
+}
+.model-content{
+    background-color: #fbfff6;
+}
+.modal-header{
+    min-width: 80px;
+    background-color: cadetblue;
+    padding: 0 4px;
+}
+.modal-title{
+    display: inline-block;
+}
+.modal-close-button{
+    display: inline-block;
+    float: right;
+}
+.modal-data{
+    padding: 4px;
+}

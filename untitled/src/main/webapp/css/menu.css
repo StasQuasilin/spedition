@@ -1,0 +1,31 @@
+.menu-holder{
+    position: relative;
+    /*background-color: greenyellow;*/
+}
+.menu-holder .menu{
+    /*display: none;*/
+}
+.menu-holder:hover .menu{
+    /*display: block;*/
+}
+.menu {
+    /*bottom: 0;*/
+    /*left: 0;*/
+    /*background-color: white;*/
+    /*position: absolute;*/
+    z-index: 100;
+}
+.menu-header{
+    z-index: 101;
+}
+.menu-item{
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: white;
+    border-right: solid gray 1px;
+    margin-right: 2px;
+    font-size: 10pt;
+}
+.menu-item:hover{
+    background-color: rgba(128, 128, 128, 0.42);
+}
