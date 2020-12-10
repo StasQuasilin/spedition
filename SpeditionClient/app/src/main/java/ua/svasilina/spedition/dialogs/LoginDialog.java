@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -54,7 +53,6 @@ public class LoginDialog extends DialogFragment {
     private ProgressBar progressBar;
     private TextView statusView;
     private final LoginUtil loginUtil;
-    private NetworkUtil networkUtil;
     private final LayoutInflater inflater;
     private boolean isAuthorize;
     private boolean waitAnswer = false;
@@ -65,14 +63,12 @@ public class LoginDialog extends DialogFragment {
         this.onLogin = onLogin;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         loginUtil = new LoginUtil(context);
-        networkUtil = new NetworkUtil();
         isAuthorize = loginUtil.getToken() != null;
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
-        Log.i("Login", "Create dialog");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         if (isAuthorize) {
@@ -112,7 +108,6 @@ public class LoginDialog extends DialogFragment {
             loginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("Login", "Press login button");
                     if (!waitAnswer) {
                         login();
                     }

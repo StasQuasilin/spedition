@@ -44,7 +44,7 @@ public class ReportFieldUtil {
         final Counterparty counterparty = field.getCounterparty();
         if (counterparty != null){
             counterpartyUtil.saveCounterparty(counterparty);
-            cv.put(Keys.COUNTERPARTY,counterparty.getUuid());
+            cv.put(Keys.COUNTERPARTY, counterparty.getUuid());
         } else {
             cv.put(Keys.COUNTERPARTY, Keys.EMPTY);
         }
@@ -128,7 +128,7 @@ public class ReportFieldUtil {
                 field.setUuid(query.getString(uuidColumn));
                 final String counterpartyUuid = query.getString(counterpartColumn);
                 if(counterpartyUuid != null && !counterpartyUuid.isEmpty()){
-                    field.setCounterparty(counterpartyUtil.getCounterparty(counterpartyUuid));
+                    field.setCounterparty(counterpartyUtil.getCounterparty(counterpartyUuid, database));
                 }
                 final long aLong = query.getLong(arriveColumn);
                 if (aLong > 0){

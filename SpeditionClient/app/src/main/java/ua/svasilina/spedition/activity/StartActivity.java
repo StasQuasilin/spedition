@@ -31,6 +31,7 @@ public class StartActivity extends AppCompatActivity {
         LoginUtil loginUtil = new LoginUtil(context);
         reportUtil = new ReportUtil(context);
         onActiveReport = new OnActiveReport(context);
+        dbUtil = new DBUtil(context);
 
         setContentView(R.layout.start_activity);
         final ActionBar supportActionBar = getSupportActionBar();
@@ -38,7 +39,6 @@ public class StartActivity extends AppCompatActivity {
             supportActionBar.setTitle(R.string.sync_title);
         }
         if (loginUtil.getToken() != null) {
-            dbUtil = new DBUtil(getApplicationContext());
             syncNow();
         } else {
             LoginDialog.showLoginDialog(context, getSupportFragmentManager(), new OnSyncDone(){
@@ -47,7 +47,6 @@ public class StartActivity extends AppCompatActivity {
                 syncNow();
                 }
             });
-
         }
 
     }

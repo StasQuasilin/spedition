@@ -193,7 +193,6 @@ public class ReportFieldEditDialog extends DialogFragment {
     }
 
     private void initCounterpartyInput(final ListView counterpartyList, final TextView counterpartyLabel) {
-        final Context context = getContext();
         final CounterpartySearchUtil counterpartySearchUtil = new CounterpartySearchUtil(context);
         final CustomAdapter<Counterparty> adapter = new CustomAdapter<>(context, android.R.layout.simple_list_item_1, new CustomAdapterBuilder<Counterparty>() {
             @Override
@@ -203,9 +202,9 @@ public class ReportFieldEditDialog extends DialogFragment {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        reportField.setCounterparty(item);
                         counterpartyInput.setText(item.getName());
                         counterpartyList.setVisibility(View.GONE);
+                        reportField.setCounterparty(item);
                     }
                 });
             }
@@ -366,13 +365,13 @@ public class ReportFieldEditDialog extends DialogFragment {
     private void save(){
         Counterparty counterparty = reportField.getCounterparty();
         if(counterparty == null){
-            final String counterpartyValue = this.counterpartyInput.getText().toString();
+            System.out.println("COUNTERPARTY NOT INSERT");
+            final String counterpartyValue = counterpartyInput.getText().toString();
             if (!counterpartyValue.isEmpty()){
                 counterparty = new Counterparty();
                 counterparty.setName(counterpartyValue);
                 reportField.setCounterparty(counterparty);
             }
-
         }
 
         reportField.setProduct(adapter.getItem(product.getSelectedItemPosition()));

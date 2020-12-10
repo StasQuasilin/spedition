@@ -167,7 +167,6 @@ public class SyncUtil {
             @Override
             public void run() {
                 for (Report report : reports){
-                    System.out.println("!!!!!!!!!!!!Save report " + report.getUuid());
                     saveReport(report, false);
                 }
             }

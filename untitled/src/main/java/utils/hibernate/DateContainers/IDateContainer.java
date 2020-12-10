@@ -1,6 +1,6 @@
 package utils.hibernate.DateContainers;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by Quasilin on 02.11.2018.

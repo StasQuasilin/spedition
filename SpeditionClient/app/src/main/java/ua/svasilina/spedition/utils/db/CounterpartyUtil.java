@@ -27,30 +27,31 @@ public class CounterpartyUtil {
         String uuid = counterparty.getUuid();
         if(uuid == null){
             uuid = UUID.randomUUID().toString();
+            System.out.println("SAVE NEW COUNTERPARTY " + uuid);
             counterparty.setUuid(uuid);
+        } else {
+            System.out.println("SAVE COUNTERPARTY " + uuid);
         }
         values.put(Keys.UUID, uuid);
         values.put(Keys.NAME, counterparty.getName());
         final SQLiteDatabase database = helper.getWritableDatabase();
-        String[] p = new String[]{uuid};
-        final Cursor query = database.query(Tables.COUNTERPARTY, null, UUID_PARAM, p, null, null, null, ONE_ROW);
+        String[] args = new String[]{uuid};
+        final Cursor query = database.query(Tables.COUNTERPARTY, null, UUID_PARAM, args, null, null, null, ONE_ROW);
         if(query.moveToFirst()){
-            database.update(Tables.COUNTERPARTY, values, UUID_PARAM, p);
+            database.update(Tables.COUNTERPARTY, values, UUID_PARAM, args);
         } else {
             database.insert(Tables.COUNTERPARTY,null, values);
         }
         database.close();
     }
 
-    public Counterparty getCounterparty(String counterpartyUuid) {
-        final SQLiteDatabase database = helper.getReadableDatabase();
+    public Counterparty getCounterparty(String counterpartyUuid, SQLiteDatabase database) {
         Counterparty counterparty = null;
         final Cursor query = database.query(Tables.COUNTERPARTY, null, UUID_PARAM, new String[]{counterpartyUuid}, null, null, null, ONE_ROW);
         if (query.moveToFirst()){
             parser.init(query);
             counterparty = parser.parse(query);
         }
-        database.close();
         return counterparty;
     }
 }

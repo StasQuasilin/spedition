@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.UUID;
 
+import ua.svasilina.spedition.constants.DBConstants;
 import ua.svasilina.spedition.constants.Keys;
 import ua.svasilina.spedition.entity.Product;
 import ua.svasilina.spedition.entity.reports.Report;
@@ -109,7 +110,10 @@ public class ReportUtil {
         String uuid = report.getUuid();
         if (uuid == null){
             uuid = UUID.randomUUID().toString();
+            System.out.println("SAVE NEW REPORT " + uuid);
             report.setUuid(uuid);
+        } else {
+            System.out.println("SAVE REPORT " + uuid);
         }
         cv.put(Keys.UUID, uuid);
         if (leaveTime != null) {
@@ -131,9 +135,10 @@ public class ReportUtil {
 
         final String id = String.valueOf(report.getId());
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
-        final Cursor query = db.query(Tables.REPORTS, new String[]{Keys.ID}, "id=?", new String[]{id}, null, null, null, ONE_ROW);
+        String[] args = new String[]{uuid};
+        final Cursor query = db.query(Tables.REPORTS, new String[]{Keys.ID}, DBConstants.UUID_PARAM, args, null, null, null, ONE_ROW);
         if (query.moveToFirst()){
-            db.update(Tables.REPORTS, cv, "id=?", new String[]{id});
+            db.update(Tables.REPORTS, cv, DBConstants.UUID_PARAM, args);
         } else {
             db.insert(Tables.REPORTS, null, cv);
         }

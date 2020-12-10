@@ -6,6 +6,7 @@ import constants.Keys;
 import entity.*;
 import entity.reports.CounterpartyWeight;
 import entity.reports.ReportDetails;
+import org.apache.log4j.Logger;
 import utils.hibernate.DateContainers.BETWEEN;
 import utils.hibernate.DateContainers.LE;
 import utils.hibernate.DateContainers.LT;
@@ -20,6 +21,7 @@ import java.util.List;
 import static constants.Keys.REPORT;
 
 public class ReportDAO {
+    private final Logger log =Logger.getLogger(ReferencesDAO.class);
     private final Hibernator hibernator = Hibernator.getInstance();
     private final UpdateUtil updateUtil = new UpdateUtil();
 
@@ -93,6 +95,7 @@ public class ReportDAO {
     }
 
     public List<Report> getReports(Date from, Date to) {
+        log.info("Get reports from " + from.toString() +" to " + to.toString());
         return hibernator.query(Report.class, "leaveTime", new BETWEEN(from, to));
     }
 

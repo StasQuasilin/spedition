@@ -117,7 +117,6 @@ public class Reports extends AppCompatActivity {
         if (backPressedTime + 2000 > System.currentTimeMillis()) {
             backToast.cancel();
             finish();
-            return;
         } else {
             backToast = Toast.makeText(getBaseContext(), R.string.pressBack, Toast.LENGTH_SHORT);
             backToast.show();

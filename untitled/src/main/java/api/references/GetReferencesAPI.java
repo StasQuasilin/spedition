@@ -24,7 +24,7 @@ public class GetReferencesAPI extends ServletAPI {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Answer answer = new SuccessAnswer();
         final JSONArray array = new JSONArray();
-        for (Driver driver : driverDAO.getDrivers()){
+        for (Driver driver : driverDAO.getAllList()){
             array.add(driver.toJson());
         }
         answer.addParam(Keys.DRIVERS, array);

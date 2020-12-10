@@ -1,5 +1,6 @@
 package entity;
 
+import entity.references.ReferenceItem;
 import org.json.simple.JSONObject;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import static constants.Keys.NAME;
 
 @Entity
 @Table(name = "products")
-public class Product extends JsonAble{
+public class Product extends JsonAble {
     private int id;
     private String name;
 

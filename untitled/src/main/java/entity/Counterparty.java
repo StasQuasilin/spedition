@@ -1,11 +1,14 @@
 package entity;
 
+import constants.Keys;
+import org.json.simple.JSONObject;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "counterparty")
-public class Counterparty {
+public class Counterparty extends JsonAble{
     private int id;
     private String uuid;
     private String name;
@@ -45,5 +48,14 @@ public class Counterparty {
     }
     public void setLastChange(Timestamp lastChange) {
         this.lastChange = lastChange;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        final JSONObject jsonObject = new JSONObject();
+        jsonObject.put(Keys.ID, id);
+        jsonObject.put(Keys.UUID, uuid);
+        jsonObject.put(Keys.NAME, name);
+        return jsonObject;
     }
 }

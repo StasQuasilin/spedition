@@ -29,7 +29,7 @@ public class GetCounterpartyAPI extends ServletAPI {
             final Counterparty counterparty = counterpartyDAO.getCounterparty(id);
             if(counterparty != null){
                 answer = new SuccessAnswer();
-                answer.addParam(Keys.COUNTERPARTY, counterparty);
+                answer.addParam(Keys.COUNTERPARTY, counterparty.toJson());
             } else {
                 answer = new ErrorAnswer("Counterparty " + id + " not found");
             }

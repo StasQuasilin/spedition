@@ -26,13 +26,13 @@ public class GetReportsByMonth extends ServletAPI {
     private final ReportDAO reportDAO = new ReportDAO();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         final JSONObject body = parseBody(req);
         if(body != null){
             int month = Integer.parseInt(String.valueOf(body.get(Keys.MONTH)));
             int year = Integer.parseInt(String.valueOf(body.get(Keys.YEAR)));
             final LocalDate from = LocalDate.of(year, month, 1);
-            final LocalDate to = from.plusMonths(1).minusDays(1);
+            final LocalDate to = from.plusMonths(1);
             final HashMap<User, LinkedList<Report>> repo = new HashMap<>();
             for (Report r : reportDAO.getReports(Date.valueOf(from), Date.valueOf(to))){
                 final User owner = r.getOwner();

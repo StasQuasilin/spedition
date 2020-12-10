@@ -14,6 +14,7 @@ public class LoginUtil {
     }
 
     public void saveToken(String token) {
+        System.out.println("SAVE TOKEN " + token);
         storageUtil.saveData(FILE_NAME, token);
     }
 
@@ -26,7 +27,9 @@ public class LoginUtil {
     }
 
     public String getToken() {
-        return storageUtil.readFile(FILE_NAME);
+        final String s = storageUtil.readFile(FILE_NAME);
+        System.out.println("SAVED TOKEN " + s);
+        return s;
     }
 
     public void removeToken(){
