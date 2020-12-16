@@ -57,15 +57,15 @@ public class ReportDetailUtil {
                 detail.setId(query.getInt(idColumn));
                 detail.setUuid(query.getString(uuidColumn));
 
-                final String driverId = query.getString(driverColumn);
-                final Driver driver = driverUtil.getDriver(driverId);
+                final String driverUuid = query.getString(driverColumn);
+                final Driver driver = driverUtil.getDriver(driverUuid);
                 detail.setDriver(driver);
                 final String weightUUID = query.getString(ownWeightColumn);
                 if(weightUUID != null) {
                     final Weight weight = weightUtil.getWeight(weightUUID);
                     detail.setOwnWeight(weight);
                 }
-                getCounterpartyWeight(detail, db);
+                getCounterpartyWeight(detail);
                 details.add(detail);
 
             }while (query.moveToNext());
@@ -74,8 +74,9 @@ public class ReportDetailUtil {
         db.close();
     }
 
-    private void getCounterpartyWeight(ReportDetail detail, SQLiteDatabase db) {
+    private void getCounterpartyWeight(ReportDetail detail) {
         final String uuid = detail.getUuid();
+        final SQLiteDatabase db = helper.getReadableDatabase();
         final Cursor query = db.query(Tables.COUNTERPARTY_WEIGHT, null, DBConstants.DETAIL_PARAM, new String[]{uuid}, null, null, null);
         if (query.moveToFirst()){
             final int fieldColumn = query.getColumnIndex(Keys.FIELD);
@@ -87,6 +88,7 @@ public class ReportDetailUtil {
                 detail.setCounterpartyWeight(field, weight);
             } while (query.moveToNext());
         }
+        db.close();
     }
 
     public void saveDetail(ReportDetail detail, Report report, SQLiteDatabase db){
@@ -167,8 +169,7 @@ public class ReportDetailUtil {
         db.delete(Tables.REPORT_DETAILS, "id=?", new String[]{id});
     }
 
-    public void getDetails(SimpleReport simpleReport) {
-        final SQLiteDatabase db = helper.getReadableDatabase();
+    public void getDetails(SimpleReport simpleReport, SQLiteDatabase db) {
         final Cursor query = db.query(Tables.REPORT_DETAILS, new String[]{DRIVER_COLUMN}, "report=?", new String[]{simpleReport.getUuid()}, null, null, null);
         if (query.moveToFirst()){
             final int driverColumn = query.getColumnIndex(DRIVER_COLUMN);
@@ -179,6 +180,5 @@ public class ReportDetailUtil {
                 simpleReport.addDriver(driver);
             }while (query.moveToNext());
         }
-        db.close();
     }
 }

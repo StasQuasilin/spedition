@@ -30,8 +30,7 @@ import org.json.JSONObject;
 import ua.svasilina.spedition.R;
 import ua.svasilina.spedition.constants.ApiLinks;
 import ua.svasilina.spedition.utils.LoginUtil;
-import ua.svasilina.spedition.utils.NetworkUtil;
-import ua.svasilina.spedition.utils.db.OnSyncDone;
+import ua.svasilina.spedition.utils.db.OnDone;
 import ua.svasilina.spedition.utils.network.Connector;
 
 import static ua.svasilina.spedition.constants.Keys.EMPTY;
@@ -56,9 +55,9 @@ public class LoginDialog extends DialogFragment {
     private final LayoutInflater inflater;
     private boolean isAuthorize;
     private boolean waitAnswer = false;
-    private OnSyncDone onLogin;
+    private OnDone onLogin;
 
-    public LoginDialog(Context context, OnSyncDone onLogin) {
+    public LoginDialog(Context context, OnDone onLogin) {
         this.context = context;
         this.onLogin = onLogin;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -122,7 +121,7 @@ public class LoginDialog extends DialogFragment {
 
         return builder.create();
     }
-    public static void showLoginDialog(Context context, FragmentManager manager, OnSyncDone onLogin){
+    public static void showLoginDialog(Context context, FragmentManager manager, OnDone onLogin){
         new LoginDialog(context, onLogin).show(manager, "Login Dialog");
     }
     private String getNumber() {
@@ -135,15 +134,17 @@ public class LoginDialog extends DialogFragment {
         progressBar.setVisibility(View.VISIBLE);
 
         final String login = phoneEdit.getText().toString();
-        String password = passwordEdit.getText().toString();
+        final String password = passwordEdit.getText().toString();
+
         final JSONObject json = new JSONObject();
         try {
             json.put(PHONE, login);
             json.put(PASSWORD, Base64.encodeToString(password.getBytes(), Base64.NO_WRAP));
+
         } catch (JSONException ignore) {}
 
         final StatusHandler statusHandler = new StatusHandler(statusView, progressBar);
-        final LoginHandler loginHandler = new LoginHandler(loginUtil);
+        final LoginHandler loginHandler = new LoginHandler(loginUtil, onLogin);
         JsonObjectRequest request = new JsonObjectRequest(
             Request.Method.POST,
             ApiLinks.LOGIN,
@@ -163,10 +164,9 @@ public class LoginDialog extends DialogFragment {
                                 sendMessage(loginHandler, USER, user);
                             }
                             statusHandler.removeCallbacksAndMessages(null);
+
                             dismiss();
-                            if (onLogin != null){
-                                onLogin.done();
-                            }
+
                         } else {
                             String reason = response.getString(REASON);
                             sendMessage(statusHandler, REASON, reason);

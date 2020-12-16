@@ -15,7 +15,7 @@ public class DriverDAO implements ReferencesDAO {
     private final Hibernator hibernator = Hibernator.getInstance();
 
     public Driver getDriverByUUID(Object uuid){
-        return hibernator.get(Driver.class, Keys.ID, uuid);
+        return hibernator.get(Driver.class, Keys.UUID, uuid);
     }
 
     public void save(Driver driver) {

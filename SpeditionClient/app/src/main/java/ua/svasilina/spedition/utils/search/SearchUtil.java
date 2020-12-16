@@ -11,13 +11,16 @@ import ua.svasilina.spedition.utils.db.DBHelper;
 
 public abstract class SearchUtil<T> {
 
+    private static final String TAG = "Search Util";
     final DBHelper helper;
     final ItemParser<T> parser;
     final String searchPhrase;
     final int insertsCount;
     final String[] p;
+    private final Context context;
 
     public SearchUtil(Context context, ItemParser<T> parser){
+        this.context = context;
         helper = new DBHelper( context);
         this.parser = parser;
         searchPhrase = getSearchPhrase();
@@ -31,15 +34,13 @@ public abstract class SearchUtil<T> {
     }
     private LinkedList<T> findItems(String key){
         LinkedList<T> items = new LinkedList<>();
-        final String k = "%" + key + "%";
+        final String k = "%" + key.toUpperCase() + "%";
         final SQLiteDatabase database = helper.getReadableDatabase();
 
         for (int i = 0 ;i < insertsCount; i++){
             p[i] = k;
         }
-
         final Cursor query = database.query(getTableName(), null, searchPhrase, p, null, null, null);
-
         if (query.moveToFirst()){
             parser.init(query);
             do {
@@ -52,7 +53,7 @@ public abstract class SearchUtil<T> {
     private static final char SIGN = '?';
     private int insertsCount(String searchPhrase) {
         int count = 0;
-        for (char c :searchPhrase.toCharArray()){
+        for (char c : searchPhrase.toCharArray()){
             if (c == SIGN){
                 count++;
             }

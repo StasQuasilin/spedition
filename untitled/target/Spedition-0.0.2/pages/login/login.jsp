@@ -8,10 +8,10 @@
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="messages"/>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<html>
+<html lang="${locale}">
     <head>
-        <link rel="stylesheet" href="${context}/css/main.css">
-        <link rel="stylesheet" href="${context}/css/modalLayer.css">
+        <link rel="stylesheet" href="${context}/css/main.css?v=${now}">
+        <link rel="stylesheet" href="${context}/css/modalLayer.css?v="${now}">
         <title><fmt:message key="login"/></title>
         <script>
             if (typeof context === "undefined"){

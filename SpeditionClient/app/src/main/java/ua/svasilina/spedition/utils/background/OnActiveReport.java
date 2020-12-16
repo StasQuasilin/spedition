@@ -9,7 +9,8 @@ import androidx.core.content.ContextCompat;
 import java.util.Calendar;
 
 import ua.svasilina.spedition.constants.Keys;
-import ua.svasilina.spedition.entity.reports.Report;
+import ua.svasilina.spedition.entity.reports.IReport;
+import ua.svasilina.spedition.entity.reports.SimpleReport;
 import ua.svasilina.spedition.services.ActiveReportService;
 import ua.svasilina.spedition.utils.RouteBuilder;
 import ua.svasilina.spedition.utils.db.ReportUtil;
@@ -27,7 +28,7 @@ public class OnActiveReport {
     }
 
     public void checkReports(){
-        final Report activeReport = reportUtil.getActiveReport();
+        final SimpleReport activeReport = reportUtil.getActiveReport();
         if (activeReport != null){
             startService(activeReport);
         } else {
@@ -54,11 +55,11 @@ public class OnActiveReport {
         context.stopService(stopIntent);
     }
 
-    public void startService(Report report){
+    public void startService(SimpleReport report){
         updateNotification(report);
     }
 
-    public void updateNotification(Report report){
+    public void updateNotification(IReport report){
         final Calendar leaveTime = report.getLeaveTime();
         final Calendar doneDate = report.getDoneDate();
         if (leaveTime != null && doneDate == null){

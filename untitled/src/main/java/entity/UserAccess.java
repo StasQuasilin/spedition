@@ -9,6 +9,7 @@ public class UserAccess {
     private User user;
     private String password;
     private String token;
+    private int passwordHash;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,5 +45,14 @@ public class UserAccess {
     }
     public void setToken(String token) {
         this.token = token;
+    }
+
+    @Basic
+    @Column(name = "_hash")
+    public int getPasswordHash() {
+        return passwordHash;
+    }
+    public void setPasswordHash(int passwordHash) {
+        this.passwordHash = passwordHash;
     }
 }

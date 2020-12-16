@@ -50,9 +50,9 @@ public class ReportRemoveDialog extends DialogFragment {
     private void removeReport() {
         if(reportsUtil.removeReport(uuid)) {
             Intent intent = new Intent(context, Reports.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
-            Toast.makeText(context, R.string.report_remove_success, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.report_remove_success, Toast.LENGTH_SHORT).show();
             onActiveReport.checkReports();
         }
     }

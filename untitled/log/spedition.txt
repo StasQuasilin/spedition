@@ -1,0 +1,39 @@
+10.12.2020 10:40 INFO  Version:46 - HHH000412: Hibernate Core {5.3.7.Final}
+10.12.2020 10:40 INFO  Environment:213 - HHH000206: hibernate.properties not found
+10.12.2020 10:40 INFO  Version:49 - HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+10.12.2020 10:40 WARN  pooling:73 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+10.12.2020 10:40 INFO  pooling:129 - HHH10001005: using driver [org.postgresql.Driver] at URL [jdbc:postgresql://localhost:5432/spedition_db]
+10.12.2020 10:40 INFO  pooling:138 - HHH10001001: Connection properties: {password=****, user=postgres}
+10.12.2020 10:40 INFO  pooling:143 - HHH10001003: Autocommit mode: false
+10.12.2020 10:40 INFO  DriverManagerConnectionProviderImpl:281 - HHH000115: Hibernate connection pool size: 20 (min=1)
+10.12.2020 10:40 INFO  Dialect:157 - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL9Dialect
+10.12.2020 10:40 INFO  LobCreatorBuilderImpl:124 - HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+10.12.2020 10:40 INFO  BasicTypeRegistry:159 - HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@7cd1ac19
+10.12.2020 10:40 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+10.12.2020 10:40 INFO  pooling:233 - HHH10001008: Cleaning up connection pool [jdbc:postgresql://localhost:5432/spedition_db]
+10.12.2020 10:44 INFO  Version:46 - HHH000412: Hibernate Core {5.3.7.Final}
+10.12.2020 10:44 INFO  Environment:213 - HHH000206: hibernate.properties not found
+10.12.2020 10:44 INFO  Version:49 - HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+10.12.2020 10:44 WARN  pooling:73 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+10.12.2020 10:44 INFO  pooling:129 - HHH10001005: using driver [org.postgresql.Driver] at URL [jdbc:postgresql://localhost:5432/spedition_db]
+10.12.2020 10:44 INFO  pooling:138 - HHH10001001: Connection properties: {password=****, user=postgres}
+10.12.2020 10:44 INFO  pooling:143 - HHH10001003: Autocommit mode: false
+10.12.2020 10:44 INFO  DriverManagerConnectionProviderImpl:281 - HHH000115: Hibernate connection pool size: 20 (min=1)
+10.12.2020 10:44 INFO  Dialect:157 - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL9Dialect
+10.12.2020 10:44 INFO  LobCreatorBuilderImpl:124 - HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+10.12.2020 10:44 INFO  BasicTypeRegistry:159 - HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@7cd1ac19
+10.12.2020 10:44 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+10.12.2020 10:44 INFO  pooling:233 - HHH10001008: Cleaning up connection pool [jdbc:postgresql://localhost:5432/spedition_db]
+14.12.2020 10:24 INFO  Version:46 - HHH000412: Hibernate Core {5.3.7.Final}
+14.12.2020 10:24 INFO  Environment:213 - HHH000206: hibernate.properties not found
+14.12.2020 10:24 INFO  Version:49 - HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+14.12.2020 10:24 WARN  pooling:73 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+14.12.2020 10:24 INFO  pooling:129 - HHH10001005: using driver [org.postgresql.Driver] at URL [jdbc:postgresql://localhost:5432/spedition_db]
+14.12.2020 10:24 INFO  pooling:138 - HHH10001001: Connection properties: {password=****, user=postgres}
+14.12.2020 10:24 INFO  pooling:143 - HHH10001003: Autocommit mode: false
+14.12.2020 10:24 INFO  DriverManagerConnectionProviderImpl:281 - HHH000115: Hibernate connection pool size: 20 (min=1)
+14.12.2020 10:24 INFO  Dialect:157 - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL9Dialect
+14.12.2020 10:24 INFO  LobCreatorBuilderImpl:124 - HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+14.12.2020 10:24 INFO  BasicTypeRegistry:159 - HHH000270: Type registration [java.util.UUID] overrides previous : org.hibernate.type.UUIDBinaryType@37d3d232
+14.12.2020 10:24 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+14.12.2020 10:24 INFO  pooling:233 - HHH10001008: Cleaning up connection pool [jdbc:postgresql://localhost:5432/spedition_db]

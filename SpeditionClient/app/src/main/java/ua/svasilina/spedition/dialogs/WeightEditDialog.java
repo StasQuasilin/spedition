@@ -77,7 +77,7 @@ public class WeightEditDialog extends DialogFragment {
         builder.setTitle(R.string.weightTitle);
         builder.setView(view);
         builder.setNegativeButton(R.string.cancel, null);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 save();

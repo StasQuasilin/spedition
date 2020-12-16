@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import ua.svasilina.spedition.R;
@@ -31,6 +32,7 @@ public class Reports extends AppCompatActivity {
     private final ArrayList<SimpleReport> reports = new ArrayList<>();
     private long backPressedTime;
     private Toast backToast;
+    private boolean haveActive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,21 +50,29 @@ public class Reports extends AppCompatActivity {
                 reportUtil.saveReport(new Report(r));
                 oldReportsUtil.removeReport(r.getUuid());
             }
-
         }
-
-        reports.addAll(reportUtil.getReportsList());
+        final LinkedList<SimpleReport> reportsList = reportUtil.getReportsList();
+        reports.addAll(reportsList);
         ReportListAdapter adapter = new ReportListAdapter(context, R.layout.report_list_row, this.reports);
         ListView view = findViewById(R.id.report_list);
         if (view != null){
             view.setAdapter(adapter);
         }
+        for (SimpleReport report : reportsList){
+            haveActive = report.isActive();
+            if(haveActive){
+                break;
+            }
+        }
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
+        final MenuItem addItem = menu.findItem(R.id.add);
+        addItem.setVisible(!haveActive);
 
         try {
             PackageInfo pInfo = getApplicationContext().getPackageManager().getPackageInfo(getPackageName(), 0);

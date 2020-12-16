@@ -2,6 +2,7 @@ package ua.svasilina.spedition.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,7 +22,8 @@ import ua.svasilina.spedition.entity.Person;
 import ua.svasilina.spedition.utils.CustomListener;
 
 public class DriverEditDialog extends DialogFragment {
-
+    
+    private final Context context;
     private final Driver driver;
     private final LayoutInflater inflater;
 
@@ -32,11 +34,18 @@ public class DriverEditDialog extends DialogFragment {
     private final CustomListener customListener;
     private ListView phoneList;
     private SimpleListAdapter<String> adapter;
+    private final boolean editNames;
 
-    public DriverEditDialog(Driver driver, LayoutInflater inflater, CustomListener customListener) {
+    public DriverEditDialog(Driver driver, Context context, CustomListener customListener, boolean editNames) {
+        this.context = context;
         this.driver = driver;
-        this.inflater = inflater;
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.customListener = customListener;
+        this.editNames = editNames;
+    }
+
+    public DriverEditDialog(Driver driver, Context context, CustomListener customListener) {
+        this(driver, context, customListener, false);
     }
 
     @NonNull
@@ -45,17 +54,19 @@ public class DriverEditDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final View view = inflater.inflate(R.layout.driver_edit_dialog, null);
 
+        final Person person = driver.getPerson();
         surnameEdit = view.findViewById(R.id.surnameEdit);
-        surnameEdit.setText(driver.getPerson().getSurname());
+        initInput(surnameEdit, person.getSurname());
         forenameEdit = view.findViewById(R.id.forenameEdit);
-        forenameEdit.setText(driver.getPerson().getForename());
+        initInput(forenameEdit, person.getForename());
         patronymicEdit = view.findViewById(R.id.patronymicEdit);
-        patronymicEdit.setText(driver.getPerson().getPatronymic());
+        initInput(patronymicEdit, person.getPatronymic());
+
         addPhoneButton = view.findViewById(R.id.addPhoneButton);
         phoneList= view.findViewById(R.id.phonesList);
         initAddPhoneButton();
         initPhonesList();
-
+        builder.setTitle(R.string.driver_edit);
         builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -67,11 +78,18 @@ public class DriverEditDialog extends DialogFragment {
         return builder.create();
     }
 
+    private void initInput(EditText input, String value) {
+        if (value != null && !value.isEmpty()){
+            input.setText(value);
+            input.setEnabled(editNames);
+        }
+    }
+
     private void initAddPhoneButton() {
         addPhoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditPhonesDialog epd = new EditPhonesDialog(getContext(), driver.getPerson().getPhones(), new CustomListener() {
+                EditPhonesDialog epd = new EditPhonesDialog(context, driver.getPerson().getPhones(), new CustomListener() {
                     @Override
                     public void onChange() {
                         updatePhoneList();
@@ -83,7 +101,7 @@ public class DriverEditDialog extends DialogFragment {
     }
 
     private void initPhonesList() {
-        adapter = new SimpleListAdapter<>(getContext(), android.R.layout.simple_list_item_1, null);
+        adapter = new SimpleListAdapter<>(context, android.R.layout.simple_list_item_1, null);
         phoneList.setAdapter(adapter);
         updatePhoneList();
     }

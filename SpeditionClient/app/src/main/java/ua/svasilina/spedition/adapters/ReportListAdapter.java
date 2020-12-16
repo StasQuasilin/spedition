@@ -50,12 +50,12 @@ public class ReportListAdapter extends ArrayAdapter<SimpleReport> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        View view = convertView;
-        if (view == null){
-            view = inflater.inflate(resource, parent, false);
-        }
+        final View view = convertView != null ? convertView : inflater.inflate(resource, parent, false);
 
         final SimpleReport report = reports.get(position);
+        if (report.isActive()){
+            view.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        }
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

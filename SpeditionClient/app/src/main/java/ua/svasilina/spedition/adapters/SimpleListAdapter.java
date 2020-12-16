@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,12 +15,14 @@ import ua.svasilina.spedition.utils.AdapterItemEditInterface;
 
 public class SimpleListAdapter<T> extends ArrayAdapter<T> {
 
+    private final Context context;
     private final LayoutInflater inflater;
     private final int resource;
     private final AdapterItemEditInterface<T> listener;
 
     public SimpleListAdapter(@NonNull Context context, int resource, AdapterItemEditInterface<T> listener) {
         super(context, resource);
+        this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.resource = resource;
         this.listener = listener;
@@ -35,6 +36,7 @@ public class SimpleListAdapter<T> extends ArrayAdapter<T> {
         if (resource == android.R.layout.simple_list_item_1){
             if (item != null) {
                 final TextView textView = view.findViewById(android.R.id.text1);
+                textView.setTextColor(context.getResources().getColor(R.color.textColor));
                 textView.setText(item.toString());
             }
         } else {
@@ -48,7 +50,7 @@ public class SimpleListAdapter<T> extends ArrayAdapter<T> {
                     textView.setText(item.toString().toUpperCase());
                 }
             }
-            final ImageButton deleteButton = view.findViewById(R.id.delete);
+            final View deleteButton = view.findViewById(R.id.delete);
             if(deleteButton != null){
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override

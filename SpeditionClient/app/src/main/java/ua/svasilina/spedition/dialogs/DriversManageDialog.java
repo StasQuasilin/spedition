@@ -74,7 +74,7 @@ public class DriversManageDialog extends DialogFragment {
                             driver = new Driver();
                             item.setDriver(driver);
                         }
-                        new DriverEditDialog(driver, inflater, new CustomListener() {
+                        new DriverEditDialog(driver, context, new CustomListener() {
                             @Override
                             public void onChange() {
 
@@ -141,8 +141,7 @@ public class DriversManageDialog extends DialogFragment {
         driverList.setAdapter(driveListAdapter);
 
         builder.setView(view);
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final Editable text = driverInput.getText();

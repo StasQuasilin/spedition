@@ -65,6 +65,10 @@ public abstract class IReport {
         doneDate.setTimeInMillis(time);
     }
 
+    public boolean isActive(){
+        return leaveTime != null && doneDate == null;
+    }
+
     public void addRoute(String point){
         route.add(point);
     }

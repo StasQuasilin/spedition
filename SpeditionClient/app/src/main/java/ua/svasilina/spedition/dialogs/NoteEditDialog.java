@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -107,7 +106,7 @@ public class NoteEditDialog extends DialogFragment {
             noteEdit = view.findViewById(R.id.noteEdit);
             noteEdit.setText(text);
 
-            final ImageButton saveNote = view.findViewById(R.id.saveNote);
+            final View saveNote = view.findViewById(R.id.saveNote);
             saveNote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

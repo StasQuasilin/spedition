@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,18 +14,17 @@ import androidx.annotation.Nullable;
 import java.util.Calendar;
 
 import ua.svasilina.spedition.R;
+import ua.svasilina.spedition.constants.Patterns;
 import ua.svasilina.spedition.entity.ReportNote;
 import ua.svasilina.spedition.utils.AdapterItemEditInterface;
-
-import static ua.svasilina.spedition.constants.Keys.COLON;
-import static ua.svasilina.spedition.constants.Keys.DOT;
-import static ua.svasilina.spedition.constants.Keys.SPACE;
+import ua.svasilina.spedition.utils.builders.DateTimeBuilder;
 
 public class NoteAdapter extends ArrayAdapter<ReportNote> {
 
     private final int resource;
     private LayoutInflater inflater;
     private AdapterItemEditInterface<ReportNote> onClick;
+    private DateTimeBuilder dtb;
 
     public NoteAdapter(@NonNull Context context, int resource, LayoutInflater inflater,
                        AdapterItemEditInterface<ReportNote> onClick) {
@@ -34,6 +32,7 @@ public class NoteAdapter extends ArrayAdapter<ReportNote> {
         this.resource = resource;
         this.inflater = inflater;
         this.onClick = onClick;
+        dtb = new DateTimeBuilder(Patterns.DATE_TIME_PATTERN);
     }
 
     @SuppressLint("SetTextI18n")
@@ -53,24 +52,14 @@ public class NoteAdapter extends ArrayAdapter<ReportNote> {
             final Calendar time = item.getTime();
             if (time != null){
                 final TextView timeView = view.findViewById(R.id.noteTime);
-                timeView.setText(
-                        time.get(Calendar.HOUR_OF_DAY) +
-                                COLON +
-                                time.get(Calendar.MINUTE) +
-                                SPACE +
-                                time.get(Calendar.DAY_OF_MONTH) +
-                                DOT +
-                                time.get(Calendar.MONTH) +
-                                DOT +
-                                time.get(Calendar.YEAR)
-                );
+                timeView.setText(dtb.build(time));
             }
 
             final TextView text = view.findViewById(R.id.noteText);
             text.setText(item.getNote());
         }
 
-        final ImageButton deleteButton = view.findViewById(R.id.deleteNote);
+        final View deleteButton = view.findViewById(R.id.deleteNote);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

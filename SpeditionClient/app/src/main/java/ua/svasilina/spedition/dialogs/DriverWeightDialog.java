@@ -90,6 +90,7 @@ public class DriverWeightDialog extends DialogFragment {
                     @Override
                     public void onSave(Weight weight) {
                         insertWeight(item, weight);
+                        weightAdapter.notifyDataSetChanged();
                     }
                 }).show(getParentFragmentManager(),"WED");
             }

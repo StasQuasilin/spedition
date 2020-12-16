@@ -27,13 +27,10 @@ public class CounterpartyUtil {
         String uuid = counterparty.getUuid();
         if(uuid == null){
             uuid = UUID.randomUUID().toString();
-            System.out.println("SAVE NEW COUNTERPARTY " + uuid);
             counterparty.setUuid(uuid);
-        } else {
-            System.out.println("SAVE COUNTERPARTY " + uuid);
         }
         values.put(Keys.UUID, uuid);
-        values.put(Keys.NAME, counterparty.getName());
+        values.put(Keys.NAME, counterparty.getName().toUpperCase());
         final SQLiteDatabase database = helper.getWritableDatabase();
         String[] args = new String[]{uuid};
         final Cursor query = database.query(Tables.COUNTERPARTY, null, UUID_PARAM, args, null, null, null, ONE_ROW);

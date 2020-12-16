@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -77,7 +77,7 @@ public class ReportEdit extends AppCompatActivity {
     private Button timeButton;
     private Button routeButton;
     private Spinner productList;
-    private Button weightButton;
+    private ImageButton weightButton;
     private Button fixLeaveTime;
     private View leaveTimeContainer;
     private Button fareEdit;
@@ -241,6 +241,7 @@ public class ReportEdit extends AppCompatActivity {
             @Override
             public void onChange() {
                 updateWeightButton();
+                updateDriverButtonValue();
                 save(false);
             }
         }).show(getSupportFragmentManager(), "Weight Dialog");
@@ -509,8 +510,8 @@ public class ReportEdit extends AppCompatActivity {
                     save(false);
                     final Context context = getApplicationContext();
                     final Intent intent = new Intent(context, ReportShow.class);
-                    intent.putExtra(ID, report.getUuid());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(ID, report.getId());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
             });
@@ -520,7 +521,6 @@ public class ReportEdit extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Log.i("Edit", "Back");
         super.onBackPressed();
     }
 
@@ -531,7 +531,7 @@ public class ReportEdit extends AppCompatActivity {
         if (redirect) {
             final Context context = getApplicationContext();
             Intent intent = new Intent(context, Reports.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         } else {
             final List<ReportField> fields = report.getFields();

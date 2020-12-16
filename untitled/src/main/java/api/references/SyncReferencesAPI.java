@@ -54,8 +54,9 @@ public class SyncReferencesAPI extends ServletAPI {
             list = dao.getIdAfter(timestamp);
         }
         JSONArray array = new JSONArray();
-
-        Collections.addAll(array, list);
+        for (int i : list){
+            array.add(i);
+        }
         return array;
     }
 }

@@ -14,11 +14,12 @@ import ua.svasilina.spedition.dialogs.LoginDialog;
 import ua.svasilina.spedition.utils.LoginUtil;
 import ua.svasilina.spedition.utils.background.OnActiveReport;
 import ua.svasilina.spedition.utils.db.DBUtil;
-import ua.svasilina.spedition.utils.db.OnSyncDone;
+import ua.svasilina.spedition.utils.db.OnDone;
 import ua.svasilina.spedition.utils.db.ReportUtil;
 
 public class StartActivity extends AppCompatActivity {
 
+    private static final String TAG = "Start Activity";
     private DBUtil dbUtil;
     private ReportUtil reportUtil;
     private OnActiveReport onActiveReport;
@@ -41,14 +42,13 @@ public class StartActivity extends AppCompatActivity {
         if (loginUtil.getToken() != null) {
             syncNow();
         } else {
-            LoginDialog.showLoginDialog(context, getSupportFragmentManager(), new OnSyncDone(){
+            LoginDialog.showLoginDialog(context, getSupportFragmentManager(), new OnDone(){
                 @Override
                 public void done() {
                 syncNow();
                 }
             });
         }
-
     }
 
     @Override
@@ -58,11 +58,11 @@ public class StartActivity extends AppCompatActivity {
 
     private void syncNow(){
         reportUtil.checkSync();
-        dbUtil.syncDB(this, new OnSyncDone() {
+        dbUtil.syncDB(this, new OnDone() {
             @Override
             public void done() {
                 Intent intent = new Intent(getApplicationContext(), Reports.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(intent);
             }
         });

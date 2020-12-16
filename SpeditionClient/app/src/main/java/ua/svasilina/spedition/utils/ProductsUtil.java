@@ -11,6 +11,8 @@ import ua.svasilina.spedition.entity.Product;
 import ua.svasilina.spedition.utils.db.DBHelper;
 import ua.svasilina.spedition.utils.db.Tables;
 
+import static ua.svasilina.spedition.constants.DBConstants.ONE_ROW;
+
 public class ProductsUtil {
     private static final String TAG = "Product Util";
     final  DBHelper helper;
@@ -61,9 +63,10 @@ public class ProductsUtil {
     }
 
     public Product getProduct(int productId) {
-        db = helper.getReadableDatabase();
-        final Cursor query = db.query(Tables.PRODUCTS, null, "server_id=?", new String[]{String.valueOf(productId)}, null, null, null);
-
+        if (db == null || !db.isOpen()){
+            db = helper.getReadableDatabase();
+        }
+        final Cursor query = db.query(Tables.PRODUCTS, null, "server_id=?", new String[]{String.valueOf(productId)}, null, null, null, ONE_ROW);
         if(query.moveToFirst()){
             final int serverIdIdx = query.getColumnIndex("server_id");
             final int nameIdx = query.getColumnIndex("name");

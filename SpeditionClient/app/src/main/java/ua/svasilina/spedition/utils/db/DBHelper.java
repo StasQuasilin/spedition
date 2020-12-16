@@ -118,18 +118,6 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG, "Old version: " + oldVersion + ", new version: " + newVersion);
-        if (oldVersion == 1){
-            createWeightsTable(db);
-        }
-        if(oldVersion <= 2){
-            db.execSQL("alter table " + Tables.REPORT_FIELDS + " add uuid text");
-        }
-        if( oldVersion <= 3){
-            db.execSQL("alter table " + Tables.COUNTERPARTY + " add uuid text");
-        }
-        if (oldVersion <= 4){
-            createCounterpartyWeightTable(db);
-        }
     }
 
     private void createWeightsTable(SQLiteDatabase db) {

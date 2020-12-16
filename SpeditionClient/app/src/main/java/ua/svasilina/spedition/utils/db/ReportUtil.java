@@ -16,7 +16,6 @@ import ua.svasilina.spedition.constants.Keys;
 import ua.svasilina.spedition.entity.Product;
 import ua.svasilina.spedition.entity.reports.Report;
 import ua.svasilina.spedition.entity.reports.SimpleReport;
-import ua.svasilina.spedition.utils.ProductsUtil;
 import ua.svasilina.spedition.utils.db.parsers.ReportParser;
 import ua.svasilina.spedition.utils.sync.SyncUtil;
 
@@ -33,18 +32,19 @@ public class ReportUtil {
     private final String[] simpleReportFields = new String[]{
             ID_COLUMN, Keys.UUID, LEAVE_COLUMN, DONE_COLUMN, ROUTE_COLUMN, PRODUCT_COLUMN, SEPARATED_PRODUCT_COLUMN
     };
-    private final ProductsUtil productsUtil;
     private final ReportDetailUtil detailUtil;
     private final ReportFieldUtil reportFieldUtil;
     private final SyncUtil syncUtil;
     private final DBHelper dbHelper;
     private final ReportParser reportParser;
+    private final SimpleParser simpleParser;
+    private final Context context;
 
     public ReportUtil(Context context) {
+        this.context = context;
         dbHelper = new DBHelper(context);
         reportParser = new ReportParser(context);
-
-        productsUtil = new ProductsUtil(context);
+        simpleParser = new SimpleParser(context);
         reportFieldUtil = new ReportFieldUtil(context);
         detailUtil = new ReportDetailUtil(context);
         syncUtil = new SyncUtil(context, this);
@@ -55,36 +55,14 @@ public class ReportUtil {
         final SQLiteDatabase database = dbHelper.getReadableDatabase();
         final Cursor query = database.query(Tables.REPORTS, simpleReportFields, null, null, null, null, null);
         if(query.moveToFirst()){
-
-            final int idColumn = query.getColumnIndex(ID_COLUMN);
-            final int uuidColumn = query.getColumnIndex(Keys.UUID);
-            final int leaveColumn = query.getColumnIndex(LEAVE_COLUMN);
-            final int doneColumn = query.getColumnIndex(DONE_COLUMN);
-            final int routeColumn = query.getColumnIndex(ROUTE_COLUMN);
-            final int productColumn = query.getColumnIndex(PRODUCT_COLUMN);
-
+            simpleParser.init(query);
             do {
-                SimpleReport simpleReport = new SimpleReport();
-                simpleReport.setId(query.getInt(idColumn));
-                simpleReport.setUuid(query.getString(uuidColumn));
-                final long leaveTime = query.getLong(leaveColumn);
-                if (leaveTime > 0) {
-                    simpleReport.setLeaveTime(leaveTime);
-                }
-                final long doneTime = query.getLong(doneColumn);
-                if(doneTime > 0){
-                    simpleReport.setDoneTime(doneTime);
-                }
-
-                simpleReport.setRoute(query.getString(routeColumn));
-                final int productId = query.getInt(productColumn);
-                if (productId > 0) {
-                    simpleReport.addProduct(productsUtil.getProduct(productId));
-                }
-                detailUtil.getDetails(simpleReport);
-
-                reports.add(simpleReport);
+                reports.add(simpleParser.parse(query));
             } while (query.moveToNext());
+        }
+
+        for (SimpleReport report :reports){
+            detailUtil.getDetails(report,database);
         }
         database.close();
         Collections.sort(reports);
@@ -110,10 +88,7 @@ public class ReportUtil {
         String uuid = report.getUuid();
         if (uuid == null){
             uuid = UUID.randomUUID().toString();
-            System.out.println("SAVE NEW REPORT " + uuid);
             report.setUuid(uuid);
-        } else {
-            System.out.println("SAVE REPORT " + uuid);
         }
         cv.put(Keys.UUID, uuid);
         if (leaveTime != null) {
@@ -133,7 +108,6 @@ public class ReportUtil {
         }
         cv.put(SYNC_COLUMN, false);
 
-        final String id = String.valueOf(report.getId());
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] args = new String[]{uuid};
         final Cursor query = db.query(Tables.REPORTS, new String[]{Keys.ID}, DBConstants.UUID_PARAM, args, null, null, null, ONE_ROW);
@@ -152,11 +126,11 @@ public class ReportUtil {
         String[] par = new String[]{id};
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        final int delete = db.delete(Tables.REPORTS, "uuid=?", par);
+        final int delete = db.delete(Tables.REPORTS, DBConstants.UUID_PARAM, par);
 
-        db.delete(Tables.REPORT_DETAILS, "report=?", par);
-        db.delete(Tables.REPORT_FIELDS, "report=?", par);
-        db.delete(Tables.REPORT_NOTES, "report=?", par);
+        db.delete(Tables.REPORT_DETAILS, DBConstants.REPORT_UUID, par);
+        db.delete(Tables.REPORT_FIELDS, DBConstants.REPORT_UUID, par);
+        db.delete(Tables.REPORT_NOTES, DBConstants.REPORT_UUID, par);
         if (delete > 0) {
             final ContentValues cv = new ContentValues();
             cv.put(ID_COLUMN, id);
@@ -217,28 +191,39 @@ public class ReportUtil {
     public void checkSync() {
         final SQLiteDatabase database = dbHelper.getReadableDatabase();
         final Cursor query = database.query(Tables.REPORTS, null, SYNC_COLUMN + "=?", new String[]{"0"}, null, null, null);
+
+        final LinkedList<Report> reports = new LinkedList<>();
         if(query.moveToFirst()){
             reportParser.init(query);
-            final LinkedList<Report> reports = new LinkedList<>();
             do{
                 reports.add(reportParser.parse(query));
             } while (query.moveToNext());
-            syncUtil.saveReports(reports);
         }
+
+        final Cursor cursor = database.query(Tables.REMOVE_REPORTS, null, null, null, null, null, null);
+        final LinkedList<String> removeIds = new LinkedList<>();
+        if (cursor.moveToFirst()){
+            final int idColumn = cursor.getColumnIndex(ID_COLUMN);
+            do {
+                removeIds.add(cursor.getString(idColumn));
+            } while (cursor.moveToNext());
+        }
+        database.close();
+        syncUtil.saveReports(reports, removeIds);
     }
 
-    public Report getActiveReport() {
+    public SimpleReport getActiveReport() {
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
         final Cursor query = db.query(Tables.REPORTS, null, DONE_COLUMN + " is NULL", null, null, null, null);
+        SimpleReport report;
         if (query.moveToFirst()){
-            reportParser.init(query);
-            Report report;
+            simpleParser.init(query);
             do{
-                report = reportParser.parse(query);
+                report = simpleParser.parse(query);
                 if (report.getLeaveTime() != null){
                     return report;
                 }
-            }while (query.moveToFirst());
+            } while (query.moveToNext());
         }
         return null;
     }

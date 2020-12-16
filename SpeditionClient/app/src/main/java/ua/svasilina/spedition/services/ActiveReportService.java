@@ -51,8 +51,9 @@ public class ActiveReportService extends Service {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(route)
                 .setContentText(getResources().getString(R.string.press_for_open))
-                .setSmallIcon(R.drawable.ic_logo)
+                .setSmallIcon(R.drawable.ic_truck_notification)
                 .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build();
         startForeground(NOTIFICATION_ID, notification);
         Timer timer = new Timer();
@@ -73,7 +74,7 @@ public class ActiveReportService extends Service {
             NotificationChannel serviceChannel = new NotificationChannel(
                     CHANNEL_ID,
                     CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_DEFAULT
+                    NotificationManager.IMPORTANCE_LOW
             );
             NotificationManager manager = getSystemService(NotificationManager.class);
             if (manager != null) {

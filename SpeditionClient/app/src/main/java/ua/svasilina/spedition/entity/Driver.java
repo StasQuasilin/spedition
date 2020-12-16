@@ -5,13 +5,12 @@ import androidx.annotation.NonNull;
 import org.json.simple.JSONObject;
 
 import static ua.svasilina.spedition.constants.Keys.FORENAME;
-import static ua.svasilina.spedition.constants.Keys.ID;
 import static ua.svasilina.spedition.constants.Keys.PATRONYMIC;
 import static ua.svasilina.spedition.constants.Keys.SURNAME;
 import static ua.svasilina.spedition.constants.Keys.UUID;
 
 public class Driver implements JsonAble {
-    private long id = -1;
+//    private long id = -1;
     private int serverId = -1;
     private String uuid;
     private Person person;
@@ -23,7 +22,7 @@ public class Driver implements JsonAble {
     public static Driver fromJson(JSONObject driverJson) {
         if (driverJson != null) {
             Driver driver = new Driver();
-            driver.setUuid(String.valueOf(driverJson.get(ID)));
+            driver.setUuid(String.valueOf(driverJson.get(UUID)));
             Person person = new Person();
             person.setSurname(String.valueOf(driverJson.get(SURNAME)));
             person.setForename(String.valueOf(driverJson.get(FORENAME)));
@@ -34,12 +33,12 @@ public class Driver implements JsonAble {
         return null;
     }
 
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
+//    public long getId() {
+//        return id;
+//    }
+//    public void setId(long id) {
+//        this.id = id;
+//    }
 
     public int getServerId() {
         return serverId;
@@ -65,7 +64,7 @@ public class Driver implements JsonAble {
     @Override
     public JSONObject toJson() {
         JSONObject json = person.toJson();
-        json.put(ID, serverId);
+//        json.put(ID, serverId);
         json.put(UUID, uuid);
         return json;
     }

@@ -14,9 +14,11 @@
     right: 0;
     width: fit-content;
     height: fit-content;
+    width: -moz-fit-content;
 }
 .model-content{
     background-color: #fbfff6;
+    width: -moz-fit-content;
 }
 .modal-header{
     min-width: 80px;

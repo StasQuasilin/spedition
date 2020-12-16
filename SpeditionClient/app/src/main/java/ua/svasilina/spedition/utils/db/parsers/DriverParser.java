@@ -9,15 +9,14 @@ import ua.svasilina.spedition.utils.search.ItemParser;
 
 public class DriverParser extends ItemParser<Driver> {
 
-    private int idIdx;
-
+    private int uuidColumn;
     private int serverIdColumn;
     private int surnameIdx;
     private int forenameIdx;
 
     @Override
     public void init(Cursor query) {
-        idIdx = query.getColumnIndex(Keys.ID);
+        uuidColumn = query.getColumnIndex(Keys.UUID);
         serverIdColumn = query.getColumnIndex(Keys.SERVER_ID);
         surnameIdx = query.getColumnIndex(Keys.SURNAME);
         forenameIdx = query.getColumnIndex(Keys.FORENAME);
@@ -25,12 +24,12 @@ public class DriverParser extends ItemParser<Driver> {
 
     @Override
     public Driver parse(Cursor query) {
-        final int id = query.getInt(idIdx);
         final int serverId = query.getInt(serverIdColumn);
+        final String uuid = query.getString(uuidColumn);
         final String surname = query.getString(surnameIdx);
         final String forename = query.getString(forenameIdx);
         Driver driver = new Driver();
-        driver.setId(id);
+        driver.setUuid(uuid);
         driver.setServerId(serverId);
         final Person person = driver.getPerson();
         person.setSurname(surname);

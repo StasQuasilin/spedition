@@ -101,9 +101,10 @@ public class ReportFieldEditDialog extends DialogFragment {
         if (counterparty !=null){
             counterpartyInput.setText(counterparty.getName());
         }
-        final ListView counterpartyList = view.findViewById(R.id.counterpartyList);
+        final View counterpartyListContainer = view.findViewById(R.id.counterpartyListContainer);
+        final ListView counterpartyList = counterpartyListContainer.findViewById(R.id.counterpartyList);
         final TextView counterpartyLabel = view.findViewById(R.id.counterpartyLabel);
-        initCounterpartyInput(counterpartyList, counterpartyLabel);
+        initCounterpartyInput(counterpartyList, counterpartyListContainer, counterpartyLabel);
 
         fixArrive = view.findViewById(R.id.fixArrive);
         arriveContainer = view.findViewById(R.id.arriveContainer);
@@ -192,7 +193,7 @@ public class ReportFieldEditDialog extends DialogFragment {
         }
     }
 
-    private void initCounterpartyInput(final ListView counterpartyList, final TextView counterpartyLabel) {
+    private void initCounterpartyInput(final ListView counterpartyList, final View counterpartyListContainer, final TextView counterpartyLabel) {
         final CounterpartySearchUtil counterpartySearchUtil = new CounterpartySearchUtil(context);
         final CustomAdapter<Counterparty> adapter = new CustomAdapter<>(context, android.R.layout.simple_list_item_1, new CustomAdapterBuilder<Counterparty>() {
             @Override
@@ -203,13 +204,13 @@ public class ReportFieldEditDialog extends DialogFragment {
                     @Override
                     public void onClick(View v) {
                         counterpartyInput.setText(item.getName());
-                        counterpartyList.setVisibility(View.GONE);
+                        counterpartyListContainer.setVisibility(View.GONE);
                         reportField.setCounterparty(item);
                     }
                 });
             }
         });
-        counterpartyList.setVisibility(View.GONE);
+        counterpartyListContainer.setVisibility(View.GONE);
         counterpartyList.setAdapter(adapter);
         counterpartyInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -224,7 +225,7 @@ public class ReportFieldEditDialog extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                counterpartyList.setVisibility(View.GONE);
+                counterpartyListContainer.setVisibility(View.GONE);
                 if (s.length() > 1){
                     reportField.setCounterparty(null);
                     counterpartySearchUtil.search(adapter, s.toString());
@@ -232,7 +233,7 @@ public class ReportFieldEditDialog extends DialogFragment {
                         newCounterparty();
                     } else {
                         oldCounterparty();
-                        counterpartyList.setVisibility(View.VISIBLE);
+                        counterpartyListContainer.setVisibility(View.VISIBLE);
                     }
                 } else {
                     oldCounterparty();

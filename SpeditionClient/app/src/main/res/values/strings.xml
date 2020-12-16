@@ -30,7 +30,7 @@
     <string name="any_connected">Інтернет підключений</string>
     <string name="lost_connection">Втрата з’єднання</string>
     <string name="routeEdit">Маршрут</string>
-    <string name="base">Бездрик</string>
+    <string name="sweet_home">Бездрик</string>
     <string name="give">Передано</string>
     <string name="discarded">Отримано</string>
     <string name="B">"Б: "</string>
@@ -110,4 +110,9 @@
     <string name="save_status">Статус збереження</string>
     <string name="sync_title">Синхронізація</string>
     <string name="press_for_open">Торкніться щоб відкрити</string>
+    <string name="driver_edit_attention">Увага! Цей діалог призначений для редагування
+        некоректних даних уже збереженого в базі водія. Змін</string>
+    <string name="newDriver">Додати нового водія</string>
+    <string name="route_hint">Введіть назву міста</string>
+    <string name="add_point">Додати точку відвантаження</string>
 </resources>

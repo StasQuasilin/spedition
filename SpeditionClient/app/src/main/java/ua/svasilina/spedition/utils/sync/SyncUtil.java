@@ -55,7 +55,7 @@ public class SyncUtil {
             public void run() {
                 runTimer = false;
                 for (Report r : reportsUtil.getUnSyncReports()){
-                    saveReport(r, false);
+                    sendReport(r, false);
                 }
                 
                 for (String item : reportsUtil.getRemoved()){
@@ -117,14 +117,13 @@ public class SyncUtil {
 
     private final Set<Integer> nowSync = new HashSet<>();
 
-    public void saveReport(final Report report, final boolean runBackground){
+    public void sendReport(final Report report, final boolean runBackground){
         if (report != null) {
             final long localId = (report.getId());
             final JSONObject object = new JSONObject(report.toJson());
             sendJson(ApiLinks.REPORT_SAVE, object, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    System.out.println(response);
                     try {
                         final String status = response.getString(STATUS);
                         if (status.equals(SUCCESS)) {
@@ -157,17 +156,20 @@ public class SyncUtil {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                saveReport(report, true);
+                sendReport(report, true);
             }
         }).start();
     }
 
-    public void saveReports(final LinkedList<Report> reports) {
+    public void saveReports(final LinkedList<Report> reports, final LinkedList<String> removeIds) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 for (Report report : reports){
-                    saveReport(report, false);
+                    sendReport(report, false);
+                }
+                for (String report : removeIds){
+                    remove(report, false);
                 }
             }
         }).start();

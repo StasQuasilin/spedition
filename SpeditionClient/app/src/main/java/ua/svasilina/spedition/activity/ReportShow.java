@@ -78,7 +78,9 @@ public class ReportShow extends AppCompatActivity {
         final long id = intent.getLongExtra(ID, -1);
         ReportUtil reportUtil = new ReportUtil(getApplicationContext());
         report = reportUtil.getReport(id);
-        buildReport();
+        if (report != null) {
+            buildReport();
+        }
     }
 
     @Override

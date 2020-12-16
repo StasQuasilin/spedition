@@ -36,9 +36,12 @@ public class SaveReportAPI extends ServletAPI {
         Answer answer;
         if (body != null) {
             System.out.println("!" + body);
-            final String header = req.getHeader(TOKEN);
-            final User user = userDAO.getUserByToken(header);
-            final Object uuid = body.get(UUID);
+            final String token = req.getHeader(TOKEN);
+            final User user = userDAO.getUserByToken(token);
+            Object uuid = body.get(UUID);
+            if (uuid == null){
+                uuid = body.get(ID);
+            }
             Report report = reportDAO.getReportByUUID(uuid);
 
             if (report == null){
@@ -138,15 +141,16 @@ public class SaveReportAPI extends ServletAPI {
     }
 
     private Driver extractDriver(JSONObject driverJson) {
-        Driver driver = driverDAO.getDriverByUUID(driverJson.get(ID));
+        final Object uuid = driverJson.get(UUID);
+        Driver driver = driverDAO.getDriverByUUID(uuid);
         int hash = -1;
         if (driver == null){
             driver = new Driver();
+            driver.setUuid(uuid.toString());
             driver.setPerson(new Person());
         } else {
             hash = driver.hashCode();
         }
-        driver.setUuid(String.valueOf(driverJson.get(ID)));
         final Person person = driver.getPerson();
 
         person.setSurname(String.valueOf(driverJson.get(SURNAME)));

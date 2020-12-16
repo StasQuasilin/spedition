@@ -20,7 +20,7 @@ import java.util.List;
 import static constants.Keys.USER;
 
 @WebServlet(ApiLinks.REPORTS)
-public class GetReports extends ServletAPI {
+public class GetReportsAPI extends ServletAPI {
 
     private final ReportDAO reportDAO = new ReportDAO();
     private final UserDAO userDAO = new UserDAO();

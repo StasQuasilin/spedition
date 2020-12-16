@@ -22,5 +22,9 @@ function loadModal(url, params) {
     })
 }
 function logout() {
-    PostReq(logoutApi);
+    PostReq(logoutApi, null, function (a) {
+        if(a.status === 'success'){
+            location.reload();
+        }
+    });
 }

@@ -8,7 +8,7 @@
     <ListView
         android:id="@+id/expensesList"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -73,5 +73,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/amountEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/amountEdit"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:srcCompat="@android:drawable/ic_menu_add"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

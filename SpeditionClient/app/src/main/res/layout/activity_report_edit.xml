@@ -92,7 +92,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_menu_add"
-        android:focusable="true" />
+        android:focusable="true"
+        android:contentDescription="@string/add_point" />
 
     <TextView
         android:id="@+id/textView15"
@@ -223,15 +224,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/wButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="@string/ownWeight"
 
+        android:background="@android:drawable/btn_star_big_on"
+        android:contentDescription="@string/ownWeight"
         android:textColor="@color/textColor"
-        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/driverButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/driverButton" />

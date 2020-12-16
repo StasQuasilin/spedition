@@ -8,6 +8,7 @@ import entity.reports.CounterpartyWeight;
 import entity.reports.ReportDetails;
 import org.apache.log4j.Logger;
 import utils.hibernate.DateContainers.BETWEEN;
+import utils.hibernate.DateContainers.GE;
 import utils.hibernate.DateContainers.LE;
 import utils.hibernate.DateContainers.LT;
 import utils.hibernate.Hibernator;
@@ -43,8 +44,7 @@ public class ReportDAO {
 
     public List<Report> getReports(User user) {
         HashMap<String, Object> params = new HashMap<>();
-        params.put("leaveTime", State.notNull);
-        params.put("done", new LE(Date.valueOf(LocalDate.now().plusMonths(1))));
+        params.put("leaveTime", new GE(Date.valueOf(LocalDate.now().minusMonths(1))));
         final Role role = user.getRole();
         if (role == Role.supervisor){
             params.put("owner/supervisor", user);

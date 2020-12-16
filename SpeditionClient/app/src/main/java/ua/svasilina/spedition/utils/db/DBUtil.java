@@ -53,7 +53,8 @@ public class DBUtil {
     private ProgressBar loadProgress;
     private TextView loadStatus;
 
-    public void syncDB(final StartActivity view, final OnSyncDone onSyncDone){
+    public void syncDB(final StartActivity view, final OnDone onDone){
+
         message = view.findViewById(R.id.textInfo);
         loadGroup = view.findViewById(R.id.loadGroup);
         loadTitle = view.findViewById(R.id.loadTitle);
@@ -77,6 +78,7 @@ public class DBUtil {
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onResponse(JSONObject response) {
+                        Toast.makeText(context, "response receive", Toast.LENGTH_LONG).show();
                         try {
                             final String status = response.getString(Keys.STATUS);
                             if (status.equals(Keys.SUCCESS)){
@@ -122,14 +124,14 @@ public class DBUtil {
                                 }
                                 Toast.makeText(context, R.string.sync_success, Toast.LENGTH_LONG).show();
                                 db.close();
-                                onSyncDone.done();
+                                onDone.done();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             final String msg = context.getResources().getString(R.string.sync_error) + " " + e.getMessage();
                             Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                             db.close();
-                            onSyncDone.done();
+                            onDone.done();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -139,7 +141,7 @@ public class DBUtil {
                         final String msg = context.getResources().getString(R.string.sync_error) + " " + error.getMessage();
                         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                         db.close();
-                        onSyncDone.done();
+                        onDone.done();
                     }
                 });
     }
@@ -276,7 +278,7 @@ public class DBUtil {
         final String uuid = counterparty.getString(Keys.UUID);
         cv.put(Keys.UUID, uuid);
         cv.put(Keys.SERVER_ID, counterparty.getString(Keys.ID));
-        cv.put(Keys.NAME, counterparty.getString(Keys.NAME));
+        cv.put(Keys.NAME, counterparty.getString(Keys.NAME).toUpperCase());
         String[] args = new String[]{uuid};
         if (!db.isOpen()){
             db = helper.getWritableDatabase();
