@@ -206,13 +206,13 @@ public class SaveReportAPI extends ServletAPI {
             } else {
                 rd.setDriver(null);
             }
-            if (json.containsKey(WEIGHT)){
+            if (json.containsKey(OWN_WEIGHT)){
                 Weight weight = rd.getWeight();
                 if (weight == null){
                     weight = new Weight();
                     rd.setWeight(weight);
                 }
-                parseWeight(weight, (JSONObject) json.get(WEIGHT));
+                parseWeight(weight, (JSONObject) json.get(OWN_WEIGHT));
             }
             reportDAO.save(rd);
             final String rdKey = rd.getUuid();

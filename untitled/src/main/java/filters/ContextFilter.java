@@ -1,5 +1,7 @@
 package filters;
 
+import utils.hibernate.HibernateSessionFactory;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,6 @@ public class ContextFilter implements Filter {
 
     @Override
     public void destroy() {
-
+        HibernateSessionFactory.shutdown();
     }
 }

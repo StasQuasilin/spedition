@@ -5,6 +5,7 @@ import entity.*;
 import org.json.simple.JSONObject;
 
 import javax.persistence.*;
+import java.util.HashMap;
 
 @Entity
 @Table(name = "report_details")
@@ -15,6 +16,19 @@ public class ReportDetails extends JsonAble {
     private Driver driver;
     private Weight weight;
     private Product product;
+    public final HashMap<String, Weight> counterpartyWeight = new HashMap<>();
+    private void addCounterpartyWeight(String key, Weight weight){
+        counterpartyWeight.put(key, weight);
+    }
+    @Transient
+    private Weight getCounterpartyWeight(String key){
+        return counterpartyWeight.get(key);
+    }
+
+    @Transient
+    public HashMap<String, Weight> getCounterpartyWeight() {
+        return counterpartyWeight;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,5 +95,13 @@ public class ReportDetails extends JsonAble {
             jsonObject.put(Keys.WEIGHT, weight.toJson());
         }
         return jsonObject;
+    }
+
+    public void addCounterpartyWeight(CounterpartyWeight w) {
+        addCounterpartyWeight(w.getField(), w.getWeight());
+    }
+    @Transient
+    public boolean haveWeight(String fieldUuid){
+        return counterpartyWeight.containsKey(fieldUuid);
     }
 }

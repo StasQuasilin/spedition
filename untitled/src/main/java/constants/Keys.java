@@ -56,6 +56,7 @@ public interface Keys {
     String NOTES = "notes";
     String TIME = "time";
     String NOTE = "note";
+    String OWN_WEIGHT = "ownWeight";
     String WEIGHT = "weight";
     String GROSS = "gross";
     String TARE = "tare";

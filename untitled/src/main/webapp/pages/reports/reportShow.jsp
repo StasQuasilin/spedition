@@ -8,6 +8,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="ft" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="messages"/>
 <%@ page contentType="text/html;charset=UTF-8" %>
@@ -17,14 +18,6 @@
         <tr>
             <td colspan="2">
                 <fmt:message key="forwarder"/>: ${report.owner.person.value}
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <fmt:message key="driver"/>:
-                <c:if test="${not empty report.driver}">
-                    ${fn:toUpperCase(report.driver.person.value)}
-                </c:if>
             </td>
         </tr>
         <tr>
@@ -40,6 +33,38 @@
                 ${report.product.name}
             </td>
         </tr>
+        <tr>
+            <td colspan="2">
+                <fmt:message key="driver"/>:<br>
+                <div style="padding-left: 16px">
+                    <c:forEach items="${report.details}" var="detail">
+                    <div>
+                        ${detail.driver.person.value}
+                        <c:if test="${not empty detail.weight}">
+                            <c:set var="haveOwnWeight" value="true"/>
+                        </c:if>
+                    </div>
+                    </c:forEach>
+                </div>
+            </td>
+        </tr>
+        <c:if test="${haveOwnWeight}">
+            <tr>
+                <td colspan="2">
+                    <ft:message key="own.weight"/>
+                </td>
+            </tr>
+            <c:forEach items="${report.details}" var="detail">
+                <tr>
+                    <td style="text-align: right">
+                        ${detail.driver.person.value}
+                    </td>
+                    <td>
+                        ${detail.weight.gross} - ${detail.weight.tare} = ${detail.weight.gross-detail.weight.tare}
+                    </td>
+                </tr>
+            </c:forEach>
+        </c:if>
         <c:if test="${not empty report.weight}">
             <tr>
                 <td style="vertical-align: top">
@@ -86,7 +111,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="2">
-                                                    ${field.counterparty}
+                                                    ${field.counterparty.name}
                                             </td>
                                         </tr>
                                         <c:if test="${not empty field.arriveTime}">
@@ -109,7 +134,6 @@
                                                 </tr>
                                             </c:if>
                                         </c:if>
-
                                         <c:if test="${field.money != 0}">
                                             <tr>
                                                 <td>
@@ -127,26 +151,35 @@
                                                 </td>
                                             </tr>
                                         </c:if>
-                                        <c:if test="${not empty field.weight}">
+                                        <c:set var="haveCounterpartyWeight" value="false"/>
+                                        <c:forEach items="${report.details}" var="detail">
+                                            <c:if test="${detail.haveWeight(field.uuid)}">
+                                                <c:set var="haveCounterpartyWeight" value="true"/>
+                                            </c:if>
+                                        </c:forEach>
+
+                                        <c:if test="${haveCounterpartyWeight}">
                                             <tr>
                                                 <td style="vertical-align: top">
                                                     <fmt:message key="weight.point"/>
                                                 </td>
-                                                <td>
-                                                    <div>
-                                                        <fmt:message key="weight.gross"/>:
-                                                        <fmt:formatNumber value="${field.weight.gross}"/>
-                                                    </div>
-                                                    <div>
-                                                        <fmt:message key="weight.tare"/>:
-                                                        <fmt:formatNumber value="${field.weight.tare}"/>
-                                                    </div>
-                                                    <div>
-                                                        <fmt:message key="weight.net"/>:
-                                                        <fmt:formatNumber value="${field.weight.net()}"/>
-                                                    </div>
-                                                </td>
                                             </tr>
+                                            <c:forEach items="${report.details}" var="detail">
+                                                <c:if test="${detail.haveWeight(field.uuid)}">
+                                                    <tr>
+                                                        <td>
+                                                            ${detail.driver.person.value}
+                                                        </td>
+                                                        <td>
+                                                            <c:set var="counterpartyWeight" value="${detail.counterpartyWeight[field.uuid]}"/>
+                                                            ${counterpartyWeight.gross} - ${counterpartyWeight.tare} = ${counterpartyWeight.gross-counterpartyWeight.tare}
+                                                        </td>
+                                                    </tr>
+                                                </c:if>
+
+                                            </c:forEach>
+
+
                                         </c:if>
                                         <tr>
                                             <td colspan="2" style="border-bottom: solid gray 1pt; "></td>
