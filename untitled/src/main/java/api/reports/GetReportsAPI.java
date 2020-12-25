@@ -3,7 +3,8 @@ package api.reports;
 import api.ServletAPI;
 import constants.ApiLinks;
 import constants.Keys;
-import entity.Report;
+import entity.reports.Report;
+import entity.reports.ReportHeader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import utils.answers.Answer;
@@ -31,8 +32,8 @@ public class GetReportsAPI extends ServletAPI {
         if(body != null){
             System.out.println(body);
             JSONArray array = new JSONArray();
-            final List<Report> reports = reportDAO.getReports(userDAO.getUserById(body.get(USER)));
-            for  (Report r : reports){
+            final List<ReportHeader> reports = reportDAO.getReportsHeaders(userDAO.getUserById(body.get(USER)));
+            for  (ReportHeader r : reports){
                 array.add(r.toJson());
             }
             Answer answer = new SuccessAnswer();

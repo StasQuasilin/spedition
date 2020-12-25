@@ -6,11 +6,10 @@ import api.socket.UpdateUtil;
 import constants.ApiLinks;
 import constants.Keys;
 import entity.*;
-import entity.reports.ReportDetails;
+import entity.reports.Report;
 import org.json.simple.JSONObject;
 import utils.hibernate.dao.ReportDAO;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

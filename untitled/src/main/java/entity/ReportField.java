@@ -1,5 +1,7 @@
 package entity;
 
+import entity.reports.Report;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 

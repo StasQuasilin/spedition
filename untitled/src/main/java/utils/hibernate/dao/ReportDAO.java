@@ -5,14 +5,13 @@ import api.socket.UpdateUtil;
 import constants.Keys;
 import entity.*;
 import entity.reports.CounterpartyWeight;
+import entity.reports.Report;
 import entity.reports.ReportDetails;
+import entity.reports.ReportHeader;
 import org.apache.log4j.Logger;
 import utils.hibernate.DateContainers.BETWEEN;
 import utils.hibernate.DateContainers.GE;
-import utils.hibernate.DateContainers.LE;
-import utils.hibernate.DateContainers.LT;
 import utils.hibernate.Hibernator;
-import utils.hibernate.State;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -42,7 +41,7 @@ public class ReportDAO {
         }
     }
 
-    public List<Report> getReports(User user) {
+    public List<ReportHeader> getReportsHeaders(User user) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("leaveTime", new GE(Date.valueOf(LocalDate.now().minusMonths(1))));
         final Role role = user.getRole();
@@ -52,7 +51,7 @@ public class ReportDAO {
             params.put("owner", user);
         }
 
-        return hibernator.query(Report.class, params);
+        return hibernator.query(ReportHeader.class, params);
     }
 
     public List<ReportField> getFields(Object report){
@@ -94,7 +93,7 @@ public class ReportDAO {
         return hibernator.query(Report.class, params);
     }
 
-    public List<Report> getReports(Date from, Date to) {
+    public List<Report> getReportsHeaders(Date from, Date to) {
         log.info("Get reports from " + from.toString() +" to " + to.toString());
         return hibernator.query(Report.class, "leaveTime", new BETWEEN(from, to));
     }

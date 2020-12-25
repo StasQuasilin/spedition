@@ -22,7 +22,8 @@
         <mapping class="entity.Counterparty"/>
         <mapping class="entity.Locality"/>
         <mapping class="entity.Product"/>
-        <mapping class="entity.Report"/>
+        <mapping class="entity.reports.Report"/>
+        <mapping class="entity.reports.ReportHeader"/>
         <mapping class="entity.reports.ReportDetails"/>
         <mapping class="entity.reports.CounterpartyWeight"/>
         <mapping class="entity.ReportField"/>

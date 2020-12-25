@@ -4,14 +4,13 @@ import api.ServletAPI;
 import constants.ApiLinks;
 import constants.Keys;
 import entity.Answer;
-import entity.Report;
+import entity.reports.Report;
 import entity.SuccessAnswer;
 import entity.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import utils.hibernate.dao.ReportDAO;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +33,7 @@ public class GetReportsByMonth extends ServletAPI {
             final LocalDate from = LocalDate.of(year, month, 1);
             final LocalDate to = from.plusMonths(1);
             final HashMap<User, LinkedList<Report>> repo = new HashMap<>();
-            for (Report r : reportDAO.getReports(Date.valueOf(from), Date.valueOf(to))){
+            for (Report r : reportDAO.getReportsHeaders(Date.valueOf(from), Date.valueOf(to))){
                 final User owner = r.getOwner();
                 if(!repo.containsKey(owner)){
                     repo.put(owner, new LinkedList<>());

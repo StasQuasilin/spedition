@@ -15,6 +15,8 @@ public class User extends JsonAble{
     private Person person;
     private Role role;
 
+    private String appVersion;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
@@ -51,6 +53,15 @@ public class User extends JsonAble{
         this.role = role;
     }
 
+    @Basic
+    @Column(name = "app_version")
+    public String getAppVersion() {
+        return appVersion;
+    }
+    public void setAppVersion(String appVersion) {
+        this.appVersion = appVersion;
+    }
+
     @Override
     public JSONObject toJson() {
         JSONObject json = getJsonObject();
@@ -58,6 +69,8 @@ public class User extends JsonAble{
         json.put(PERSON, person.toJson());
         return json;
     }
+
+
 
     @Override
     public int hashCode() {

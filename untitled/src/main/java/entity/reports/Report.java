@@ -1,6 +1,6 @@
-package entity;
+package entity.reports;
 
-import entity.reports.ReportDetails;
+import entity.*;
 import org.hibernate.annotations.Where;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

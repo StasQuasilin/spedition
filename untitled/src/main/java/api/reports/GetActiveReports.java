@@ -3,7 +3,7 @@ package api.reports;
 import api.ServletAPI;
 import constants.ApiLinks;
 import constants.Keys;
-import entity.Report;
+import entity.reports.Report;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import utils.answers.Answer;

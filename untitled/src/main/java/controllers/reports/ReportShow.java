@@ -3,7 +3,7 @@ package controllers.reports;
 import constants.Keys;
 import constants.Links;
 import controllers.Modal;
-import entity.Report;
+import entity.reports.Report;
 import entity.ReportField;
 import entity.ReportNote;
 import entity.reports.CounterpartyWeight;
@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 

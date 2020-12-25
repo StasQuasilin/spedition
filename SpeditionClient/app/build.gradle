@@ -24,8 +24,8 @@ android {
         applicationId 'ua.svasilina.spedition'
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 19
-        versionName '1.104'
+        versionCode 20
+        versionName '1.11'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.debug
@@ -58,7 +58,7 @@ dependencies {
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation 'androidx.work:work-runtime:2.4.0'
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }

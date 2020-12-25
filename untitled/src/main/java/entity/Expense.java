@@ -1,5 +1,6 @@
 package entity;
 
+import entity.reports.Report;
 import org.json.simple.JSONObject;
 
 import javax.persistence.*;

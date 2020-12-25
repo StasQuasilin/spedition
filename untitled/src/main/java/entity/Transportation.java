@@ -1,5 +1,7 @@
 package entity;
 
+import entity.reports.Report;
+
 public class Transportation {
     private int id;
     private Report report;

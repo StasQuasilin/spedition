@@ -5,6 +5,7 @@ import constants.ApiLinks;
 import constants.Keys;
 import entity.*;
 import entity.reports.CounterpartyWeight;
+import entity.reports.Report;
 import entity.reports.ReportDetails;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

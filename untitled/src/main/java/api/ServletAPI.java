@@ -30,7 +30,7 @@ public abstract class ServletAPI extends HttpServlet {
     }
 
     public void write(HttpServletResponse resp, String msg) throws IOException {
-        log.info("Write '" + msg + "'");
+        log.debug("Write '" + msg + "'");
         resp.setCharacterEncoding(ENCODING);
         resp.getWriter().write(msg);
     }

@@ -1,11 +1,9 @@
 package api.socket;
 
 import api.socket.handlers.Handler;
-import entity.Report;
 import entity.User;
 
 import javax.websocket.Session;
-import java.util.ArrayList;
 
 public class UpdateUtil {
 

@@ -1,8 +1,9 @@
 package api.socket.handlers;
 
 import api.socket.SubscribeType;
-import entity.Report;
+import entity.reports.Report;
 import entity.User;
+import entity.reports.ReportHeader;
 import org.json.simple.JSONArray;
 import utils.hibernate.dao.ReportDAO;
 
@@ -16,8 +17,8 @@ public class ReportHandler extends Handler {
     @Override
     public Object getData(User user) {
         JSONArray array = new JSONArray();
-        for (Report report : reportDAO.getReports(user)){
-            array.add(report.toSimpleJson());
+        for (ReportHeader report : reportDAO.getReportsHeaders(user)){
+            array.add(report.toJson());
         }
         return array;
     }
