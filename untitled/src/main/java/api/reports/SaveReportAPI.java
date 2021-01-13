@@ -136,6 +136,7 @@ public class SaveReportAPI extends ServletAPI {
 
             answer = new SuccessAnswer();
             answer.addParam(ID, report.getId());
+            answer.addParam(UUID, report.getUuid());
             write(resp, answer.toJson());
             reportDAO.afterSave(report);
         }

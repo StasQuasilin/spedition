@@ -13,24 +13,27 @@ import ua.svasilina.spedition.R;
 import ua.svasilina.spedition.dialogs.LoginDialog;
 import ua.svasilina.spedition.utils.LoginUtil;
 import ua.svasilina.spedition.utils.background.OnActiveReport;
+import ua.svasilina.spedition.utils.db.AbstractReportUtil;
 import ua.svasilina.spedition.utils.db.DBUtil;
 import ua.svasilina.spedition.utils.db.OnDone;
-import ua.svasilina.spedition.utils.db.ReportUtil;
 
 public class StartActivity extends AppCompatActivity {
 
     private static final String TAG = "Start Activity";
     private DBUtil dbUtil;
-    private ReportUtil reportUtil;
+    private AbstractReportUtil reportUtil;
     private OnActiveReport onActiveReport;
+    LoginUtil loginUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Context context = getApplicationContext();
 
-        LoginUtil loginUtil = new LoginUtil(context);
-        reportUtil = new ReportUtil(context);
+        loginUtil = new LoginUtil(context);
+
+        reportUtil = AbstractReportUtil.getReportUtil(context);
+
         onActiveReport = new OnActiveReport(context);
         dbUtil = new DBUtil(context);
 
@@ -39,13 +42,19 @@ public class StartActivity extends AppCompatActivity {
         if (supportActionBar != null){
             supportActionBar.setTitle(R.string.sync_title);
         }
+
+        checkToken(context);
+
+    }
+
+    void checkToken(final Context context){
         if (loginUtil.getToken() != null) {
             syncNow();
         } else {
             LoginDialog.showLoginDialog(context, getSupportFragmentManager(), new OnDone(){
                 @Override
                 public void done() {
-                syncNow();
+                    checkToken(context);
                 }
             });
         }
@@ -57,7 +66,7 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void syncNow(){
-        reportUtil.checkSync();
+        reportUtil.syncReports();
         dbUtil.syncDB(this, new OnDone() {
             @Override
             public void done() {

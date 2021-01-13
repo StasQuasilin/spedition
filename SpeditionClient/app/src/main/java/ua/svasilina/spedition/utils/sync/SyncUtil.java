@@ -12,39 +12,32 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
 import ua.svasilina.spedition.constants.ApiLinks;
 import ua.svasilina.spedition.constants.Keys;
 import ua.svasilina.spedition.entity.reports.Report;
-import ua.svasilina.spedition.utils.JsonParser;
 import ua.svasilina.spedition.utils.LoginUtil;
-import ua.svasilina.spedition.utils.NetworkUtil;
 import ua.svasilina.spedition.utils.background.BackgroundWorkerUtil;
-import ua.svasilina.spedition.utils.db.ReportUtil;
+import ua.svasilina.spedition.utils.db.AbstractReportUtil;
 import ua.svasilina.spedition.utils.network.Connector;
 
-import static ua.svasilina.spedition.constants.Keys.ID;
 import static ua.svasilina.spedition.constants.Keys.STATUS;
 import static ua.svasilina.spedition.constants.Keys.SUCCESS;
 import static ua.svasilina.spedition.constants.Keys.TOKEN;
+import static ua.svasilina.spedition.constants.Keys.UUID;
 
 public class SyncUtil {
 
     private final Context context;
-    private final ReportUtil reportsUtil;
-    private final NetworkUtil networkUtil;
+    private final AbstractReportUtil reportsUtil;
     private final LoginUtil loginUtil;
-    private final JsonParser parser;
 
-    public SyncUtil(Context context, ReportUtil reportsUtil) {
+    public SyncUtil(Context context, AbstractReportUtil reportsUtil) {
         this.context = context;
         this.reportsUtil = reportsUtil;
-        networkUtil = new NetworkUtil();
         loginUtil  = new LoginUtil(context);
-        parser = new JsonParser();
     }
 
     private boolean runTimer;
@@ -54,13 +47,13 @@ public class SyncUtil {
             @Override
             public void run() {
                 runTimer = false;
-                for (Report r : reportsUtil.getUnSyncReports()){
-                    sendReport(r, false);
-                }
-                
-                for (String item : reportsUtil.getRemoved()){
-                    remove(item, false);
-                }
+//                for (Report r : reportsUtil.getUnSyncReports()){
+//                    sendReport(r, false);
+//                }
+//
+//                for (String item : reportsUtil.getRemoved()){
+//                    remove(item, false);
+//                }
                 if (runTimer){
                     runBackground();
                 }
@@ -119,7 +112,6 @@ public class SyncUtil {
 
     public void sendReport(final Report report, final boolean runBackground){
         if (report != null) {
-            final long localId = (report.getId());
             final JSONObject object = new JSONObject(report.toJson());
             sendJson(ApiLinks.REPORT_SAVE, object, new Response.Listener<JSONObject>() {
                 @Override
@@ -127,8 +119,8 @@ public class SyncUtil {
                     try {
                         final String status = response.getString(STATUS);
                         if (status.equals(SUCCESS)) {
-                            final int serverId = response.getInt(ID);
-                            reportsUtil.markSync(localId, serverId);
+                            final String uuid = response.getString(UUID);
+                            reportsUtil.markSync(uuid);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -161,7 +153,7 @@ public class SyncUtil {
         }).start();
     }
 
-    public void saveReports(final LinkedList<Report> reports, final LinkedList<String> removeIds) {
+    public void sendReports(final Report[] reports, final String[] removeIds) {
         new Thread(new Runnable() {
             @Override
             public void run() {

@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -55,7 +56,7 @@ import ua.svasilina.spedition.utils.CustomListener;
 import ua.svasilina.spedition.utils.ProductsUtil;
 import ua.svasilina.spedition.utils.background.OnActiveReport;
 import ua.svasilina.spedition.utils.builders.WeightStringBuilder;
-import ua.svasilina.spedition.utils.db.ReportUtil;
+import ua.svasilina.spedition.utils.db.AbstractReportUtil;
 
 import static ua.svasilina.spedition.constants.Keys.ARROW;
 import static ua.svasilina.spedition.constants.Keys.COLON;
@@ -68,7 +69,7 @@ public class ReportEdit extends AppCompatActivity {
 
     @SuppressLint("SimpleDateFormat")
     final SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
-    private ReportUtil reportUtil;
+    private AbstractReportUtil reportUtil;
     private Report report;
     private ReportFieldAdapter adapter;
 
@@ -128,27 +129,30 @@ public class ReportEdit extends AppCompatActivity {
         final ActionBar supportActionBar = getSupportActionBar();
         assert supportActionBar != null;
         supportActionBar.setTitle(R.string.edit);
-        reportUtil = new ReportUtil(context);
+
+        reportUtil = AbstractReportUtil.getReportUtil(context);
+
         productsUtil = new ProductsUtil(context);
         wsb = new WeightStringBuilder(context.getResources());
-        onActiveReport =new OnActiveReport(context);
+        onActiveReport = new OnActiveReport(context);
 
         final Intent intent = getIntent();
-        final long id = intent.getLongExtra(ID, -1);
-        System.out.println("report "+ id);
-        String uuid = null;
-        if (id != -1) {
-            report = reportUtil.getReport(id);
-            if (report != null) {
-                uuid = report.getUuid();
-            }
+        final String uuid = intent.getStringExtra(ID);
+        System.out.println("report "+ uuid);
+        if (uuid != null) {
+            report = reportUtil.getReport(uuid);
         } else {
             report = new Report();
             report.setUuid(UUID.randomUUID().toString());
         }
 
+        if (report ==null){
+            Toast.makeText(context, "Error: Report is null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         final TextView uuidView = findViewById(R.id.reportUUID);
-        uuidView.setText(report.getUuid());
+        uuidView.setText(uuid);
 
         driverButton = findViewById(R.id.driverButton);
         initDriverButton();
@@ -398,7 +402,7 @@ public class ReportEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final LinkedList<String> route = report.getRoute();
-                RouteEditDialog routeEditDialog = new RouteEditDialog(route, getLayoutInflater(), new CustomListener() {
+                RouteEditDialog routeEditDialog = new RouteEditDialog(getApplicationContext(), route, getLayoutInflater(), new CustomListener() {
                     @Override
                     public void onChange() {
                         updateRouteButtonValue();

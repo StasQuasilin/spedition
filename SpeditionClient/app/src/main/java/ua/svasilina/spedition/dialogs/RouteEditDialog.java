@@ -2,6 +2,7 @@ package ua.svasilina.spedition.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,8 +28,10 @@ public class RouteEditDialog extends DialogFragment {
     private final LinkedList<String> route;
     private final LayoutInflater inflater;
     private final CustomListener customListener;
+    private final Context context;
 
-    public RouteEditDialog(LinkedList<String> route, LayoutInflater inflater, CustomListener customListener) {
+    public RouteEditDialog(Context context, LinkedList<String> route, LayoutInflater inflater, CustomListener customListener) {
+        this.context = context;
         this.route = route;
         this.inflater = inflater;
         this.customListener = customListener;
@@ -46,7 +49,7 @@ public class RouteEditDialog extends DialogFragment {
         final View view = inflater.inflate(R.layout.route_edit, null);
         pointEdit = view.findViewById(R.id.editRoute);
 
-        adapter = new SimpleListAdapter<>(getContext(), R.layout.simple_list_item_d, new AdapterItemEditInterface<String>() {
+        adapter = new SimpleListAdapter<>(context, R.layout.simple_list_item_d, new AdapterItemEditInterface<String>() {
             @Override
             public void click(String item, int index) {
                 currentItem = index;
@@ -58,8 +61,8 @@ public class RouteEditDialog extends DialogFragment {
         listView.setAdapter(adapter);
 
         adapter.addAll(route);
-        if (adapter.getCount() > 0){
-            pointEdit.getText().clear();
+        if (adapter.getCount() == 0){
+            adapter.add(context.getResources().getString(R.string.sweet_home));
         }
 
         final Button addButton = view.findViewById(R.id.addButton);

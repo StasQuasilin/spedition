@@ -25,7 +25,7 @@ import ua.svasilina.spedition.entity.OldReport;
 import ua.svasilina.spedition.entity.reports.Report;
 import ua.svasilina.spedition.entity.reports.SimpleReport;
 import ua.svasilina.spedition.utils.OldReportsUtil;
-import ua.svasilina.spedition.utils.db.ReportUtil;
+import ua.svasilina.spedition.utils.db.SqLiteReportUtil;
 
 public class Reports extends AppCompatActivity {
 
@@ -42,7 +42,7 @@ public class Reports extends AppCompatActivity {
 
         OldReportsUtil oldReportsUtil = new OldReportsUtil(context);
 
-        ReportUtil reportUtil = new ReportUtil(context);
+        SqLiteReportUtil reportUtil = new SqLiteReportUtil(context);
         final List<OldReport> oldReports = oldReportsUtil.readStorage();
 
         if (oldReports.size() > 0){
@@ -51,7 +51,7 @@ public class Reports extends AppCompatActivity {
                 oldReportsUtil.removeReport(r.getUuid());
             }
         }
-        final LinkedList<SimpleReport> reportsList = reportUtil.getReportsList();
+        final LinkedList<SimpleReport> reportsList = reportUtil.getReports();
         reports.addAll(reportsList);
         ReportListAdapter adapter = new ReportListAdapter(context, R.layout.report_list_row, this.reports);
         ListView view = findViewById(R.id.report_list);

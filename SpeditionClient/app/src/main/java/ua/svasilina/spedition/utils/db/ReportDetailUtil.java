@@ -136,7 +136,7 @@ public class ReportDetailUtil {
             final Weight weight = entry.getValue();
             weightUtil.saveWeight(weight);
             cv.put(Keys.WEIGHT, weight.getUuid());
-            final String args[] = new String[]{uuid, key};
+            final String[] args = new String[]{uuid, key};
             final Cursor query = db.query(Tables.COUNTERPARTY_WEIGHT, null, DBConstants.DETAIL_AND_FIELD_PARAM, args, null, null, null, ONE_ROW);
             if (query.moveToFirst()){
                 db.update(Tables.COUNTERPARTY_WEIGHT, cv, DETAIL_AND_FIELD_PARAM, args);
@@ -144,7 +144,6 @@ public class ReportDetailUtil {
                 db.insert(Tables.COUNTERPARTY_WEIGHT, null, cv);
             }
         }
-
     }
 
     public void saveDetails(Report report) {
@@ -153,6 +152,7 @@ public class ReportDetailUtil {
         getDetails(report.getUuid(), details);
 
         final SQLiteDatabase db = helper.getWritableDatabase();
+
         for (ReportDetail detail : report.getDetails()){
             details.remove(detail);
             saveDetail(detail, report, db);

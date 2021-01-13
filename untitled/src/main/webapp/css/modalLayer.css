@@ -15,6 +15,7 @@
     width: fit-content;
     height: fit-content;
     width: -moz-fit-content;
+    height: -moz-fit-content;
 }
 .model-content{
     background-color: #fbfff6;

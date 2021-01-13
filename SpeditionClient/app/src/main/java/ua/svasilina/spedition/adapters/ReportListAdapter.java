@@ -54,7 +54,7 @@ public class ReportListAdapter extends ArrayAdapter<SimpleReport> {
 
         final SimpleReport report = reports.get(position);
         if (report.isActive()){
-            view.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            view.setBackgroundColor(context.getResources().getColor(R.color.activeReport));
         }
 
         view.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +140,7 @@ public class ReportListAdapter extends ArrayAdapter<SimpleReport> {
             intent.setClass(context, ReportEdit.class);
         }
 
-        intent.putExtra(ID, report.getId());
+        intent.putExtra(ID, report.getUuid());
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }

@@ -16,16 +16,16 @@ import java.util.List;
 import ua.svasilina.spedition.R;
 import ua.svasilina.spedition.entity.OldReport;
 import ua.svasilina.spedition.entity.reports.SimpleReport;
-import ua.svasilina.spedition.utils.db.ReportUtil;
+import ua.svasilina.spedition.utils.db.SqLiteReportUtil;
 
 public class CopyOldReportsDialog extends DialogFragment {
     private final List<OldReport> oldReports;
-    private final ReportUtil reportUtil;
+    private final SqLiteReportUtil reportUtil;
     private final LayoutInflater inflater;
 
     public CopyOldReportsDialog(Context context, List<OldReport> oldReports, List<SimpleReport> reports) {
         this.oldReports = oldReports;
-        reportUtil = new ReportUtil(context);
+        reportUtil = new SqLiteReportUtil(context);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 

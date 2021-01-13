@@ -25,7 +25,6 @@
         android:ems="10"
         android:hint="@string/route_hint"
         android:importantForAutofill="no"
-        android:text="@string/sweet_home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/addButton"
         app:layout_constraintStart_toStartOf="parent"

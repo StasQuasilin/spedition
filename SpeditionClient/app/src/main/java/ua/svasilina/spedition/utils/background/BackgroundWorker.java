@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import java.util.UUID;
 
 import ua.svasilina.spedition.constants.ApiLinks;
-import ua.svasilina.spedition.utils.db.ReportUtil;
+import ua.svasilina.spedition.utils.db.SqLiteReportUtil;
 import ua.svasilina.spedition.utils.network.Connector;
 import ua.svasilina.spedition.utils.sync.SyncUtil;
 
@@ -36,7 +36,7 @@ public class BackgroundWorker extends Worker {
         super(appContext, workerParams);
         this.context = appContext;
         backgroundWorkerUtil = BackgroundWorkerUtil.getInstance();
-        syncUtil = new SyncUtil(context, new ReportUtil(context));
+        syncUtil = new SyncUtil(context, new SqLiteReportUtil(context));
     }
     @NonNull
     @Override

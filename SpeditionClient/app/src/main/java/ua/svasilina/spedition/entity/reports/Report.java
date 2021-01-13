@@ -1,5 +1,7 @@
 package ua.svasilina.spedition.entity.reports;
 
+import android.content.Context;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,6 +23,7 @@ import ua.svasilina.spedition.entity.ReportDetail;
 import ua.svasilina.spedition.entity.ReportField;
 import ua.svasilina.spedition.entity.ReportNote;
 import ua.svasilina.spedition.utils.changes.IChanged;
+import ua.svasilina.spedition.utils.db.JsonObject;
 
 import static ua.svasilina.spedition.constants.Keys.COMA;
 import static ua.svasilina.spedition.constants.Keys.DONE;
@@ -39,7 +42,7 @@ import static ua.svasilina.spedition.constants.Keys.UUID;
 public class Report extends IReport implements JsonAble, Serializable, Comparable<Report>, IChanged {
 
     private int serverId = -1;
-    private final LinkedList<ReportDetail> details;
+    private final LinkedList<ReportDetail> details = new LinkedList<>();
     private Product product;
     private boolean separatedProducts;
     private int perDiem;
@@ -49,12 +52,16 @@ public class Report extends IReport implements JsonAble, Serializable, Comparabl
     final public ArrayList<ReportNote> notes = new ArrayList<>();
     private boolean fone;
 
-    public Report() {
-        details = new LinkedList<>();
+
+    public Report(JsonObject parse, Context context) {
+        super(parse);
     }
 
-    public Report(OldReport report) {
-        this();
+    public Report() {
+
+    }
+
+    public Report(OldReport report){
         setUuid(report.getUuid());
         leaveTime = report.leaveTime;
         doneDate = report.getDoneDate();

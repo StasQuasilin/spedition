@@ -21,8 +21,9 @@ import ua.svasilina.spedition.entity.ReportField;
 import ua.svasilina.spedition.entity.ReportNote;
 import ua.svasilina.spedition.entity.Route;
 import ua.svasilina.spedition.entity.Weight;
+import ua.svasilina.spedition.entity.reports.Report;
 import ua.svasilina.spedition.utils.changes.ChangeUtil;
-import ua.svasilina.spedition.utils.db.ReportUtil;
+import ua.svasilina.spedition.utils.db.SqLiteReportUtil;
 import ua.svasilina.spedition.utils.sync.SyncListUtil;
 import ua.svasilina.spedition.utils.sync.SyncUtil;
 
@@ -50,6 +51,7 @@ import static ua.svasilina.spedition.constants.Keys.TARE;
 import static ua.svasilina.spedition.constants.Keys.TIME;
 import static ua.svasilina.spedition.constants.Keys.WEIGHT;
 
+@Deprecated
 public class OldReportsUtil {
 
     private static final String TAG = "ReportsUtil";
@@ -69,7 +71,7 @@ public class OldReportsUtil {
         storageUtil = new StorageUtil(context);
         fileFilter = new FileFilter(reportsDir);
         this.context = context;
-        syncUtil = new SyncUtil(context, new ReportUtil(context));
+        syncUtil = new SyncUtil(context, new SqLiteReportUtil(context));
         changeUtil = new ChangeUtil(context);
         syncListUtil = new SyncListUtil(context);
         productsUtil = new ProductsUtil(context);

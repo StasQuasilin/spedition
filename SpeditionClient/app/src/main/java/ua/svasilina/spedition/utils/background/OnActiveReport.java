@@ -13,17 +13,17 @@ import ua.svasilina.spedition.entity.reports.IReport;
 import ua.svasilina.spedition.entity.reports.SimpleReport;
 import ua.svasilina.spedition.services.ActiveReportService;
 import ua.svasilina.spedition.utils.RouteBuilder;
-import ua.svasilina.spedition.utils.db.ReportUtil;
+import ua.svasilina.spedition.utils.db.SqLiteReportUtil;
 
 public class OnActiveReport {
 
     private final Context context;
-    private final ReportUtil reportUtil;
+    private final SqLiteReportUtil reportUtil;
     private final RouteBuilder routeBuilder;
 
     public OnActiveReport(Context context) {
         this.context = context;
-        reportUtil = new ReportUtil(context);
+        reportUtil = new SqLiteReportUtil(context);
         routeBuilder = new RouteBuilder();
     }
 
@@ -66,6 +66,7 @@ public class OnActiveReport {
             final Intent intent = new Intent(context, ActiveReportService.class);
             intent.putExtra(Keys.ROUTE, routeBuilder.build(report.getRoute()));
             intent.putExtra(Keys.ID, report.getId());
+            intent.putExtra(Keys.UUID, report.getUuid());
             ContextCompat.startForegroundService(context, intent);
         } else {
             hideNotification();

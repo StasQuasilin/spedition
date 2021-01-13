@@ -15,15 +15,10 @@ import static constants.Keys.*;
 public abstract class Controller extends AbstractController {
     private static final String CONTENT_SHELL = "/pages/contentShell.jsp";
     public void show(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
-        req.setAttribute(REGISTRATION, Links.REGISTRATION);
+        req.setAttribute(USER_LIST, Links.USERS);
         req.setAttribute(LOGOUT, Links.LOGOUT);
         req.getRequestDispatcher(CONTENT_SHELL).forward(req, response);
     }
 
-    public User getUser(HttpServletRequest req){
-        return (User) req.getSession().getAttribute(USER);
-    }
-    public Role getRole(HttpServletRequest req){
-        return (Role) req.getSession().getAttribute(ROLE);
-    }
+
 }

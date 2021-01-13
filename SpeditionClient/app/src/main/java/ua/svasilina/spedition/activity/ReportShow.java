@@ -31,7 +31,7 @@ import ua.svasilina.spedition.entity.reports.Report;
 import ua.svasilina.spedition.utils.CustomAdapterBuilder;
 import ua.svasilina.spedition.utils.builders.DateTimeBuilder;
 import ua.svasilina.spedition.utils.builders.WeightStringBuilder;
-import ua.svasilina.spedition.utils.db.ReportUtil;
+import ua.svasilina.spedition.utils.db.SqLiteReportUtil;
 
 import static ua.svasilina.spedition.constants.Keys.ID;
 import static ua.svasilina.spedition.constants.Keys.NEW_ROW;
@@ -75,8 +75,8 @@ public class ReportShow extends AppCompatActivity {
         fieldList = findViewById(R.id.fields);
 
         final Intent intent = getIntent();
-        final long id = intent.getLongExtra(ID, -1);
-        ReportUtil reportUtil = new ReportUtil(getApplicationContext());
+        final String id = intent.getStringExtra(ID);
+        SqLiteReportUtil reportUtil = new SqLiteReportUtil(getApplicationContext());
         report = reportUtil.getReport(id);
         if (report != null) {
             buildReport();

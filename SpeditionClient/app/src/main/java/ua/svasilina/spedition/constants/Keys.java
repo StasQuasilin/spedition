@@ -74,4 +74,5 @@ public interface Keys {
     String OWN_WEIGHT = "ownWeight";
     String DETAIL = "detail";
     String COUNTERPARTY_WEIGHT = "counterpartyWeight";
+    String TYPE = "type";
 }

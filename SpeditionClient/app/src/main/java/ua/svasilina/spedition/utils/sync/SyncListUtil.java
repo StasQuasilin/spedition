@@ -12,6 +12,7 @@ import ua.svasilina.spedition.entity.sync.SyncList;
 import ua.svasilina.spedition.entity.sync.SyncListItem;
 import ua.svasilina.spedition.utils.JsonParser;
 import ua.svasilina.spedition.utils.StorageUtil;
+import ua.svasilina.spedition.utils.db.JsonObject;
 
 import static ua.svasilina.spedition.constants.Keys.FIELDS;
 import static ua.svasilina.spedition.constants.Keys.REPORT;
@@ -42,9 +43,9 @@ public class SyncListUtil {
         final String data = storageUtil.readFile(fileName);
         SyncList list = new SyncList();
         if (data != null){
-            final JSONObject parse = parser.parse(data);
+            final JsonObject parse = parser.parse(data);
             if (parse != null){
-                parseList(list, parse);
+                parseList(list, parse.getOriginJson());
             }
         }
 

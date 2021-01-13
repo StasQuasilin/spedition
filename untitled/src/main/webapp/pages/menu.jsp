@@ -5,12 +5,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <div class="menu">
-        <div class="menu-item">
-            ${user.person.surname} ${user.person.forename}
-        </div>
+<%--        <div class="menu-item">--%>
+<%--            ${user.person.surname} ${user.person.forename}--%>
+<%--        </div>--%>
         <c:if test="${role ne 'user'}">
-            <div class="menu-item" onclick="loadModal('${registration}')">
-                <fmt:message key="registration"/>
+            <div class="menu-item" onclick="loadModal('${userList}')">
+                <fmt:message key="users"/>
             </div>
             <div class="menu-item" onclick="location.href = '${context}${monthReport}'">
                 <fmt:message key="mount.report"/>

@@ -10,4 +10,6 @@ public interface Links {
     String LOGOUT = "/logout" + SUFFIX;
     String REPORT_REMOVE = "/report/remove" + SUFFIX;
     String MONTH_REPORT = "/month/report" + SUFFIX;
+    String USERS = "/users" + SUFFIX;
+    String USER_DELETE = "/user/delete" + SUFFIX;
 }

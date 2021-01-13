@@ -15,18 +15,18 @@ import androidx.fragment.app.DialogFragment;
 import ua.svasilina.spedition.R;
 import ua.svasilina.spedition.activity.Reports;
 import ua.svasilina.spedition.utils.background.OnActiveReport;
-import ua.svasilina.spedition.utils.db.ReportUtil;
+import ua.svasilina.spedition.utils.db.SqLiteReportUtil;
 
 public class ReportRemoveDialog extends DialogFragment {
 
     private final String uuid;
-    private final ReportUtil reportsUtil;
+    private final SqLiteReportUtil reportsUtil;
     private final Context context;
     private final OnActiveReport onActiveReport;
 
     public ReportRemoveDialog(Context context, String uuid) {
         this.uuid = uuid;
-        reportsUtil = new ReportUtil(context);
+        reportsUtil = new SqLiteReportUtil(context);
         this.context = context;
         onActiveReport = new OnActiveReport(context);
     }

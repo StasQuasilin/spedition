@@ -6,16 +6,32 @@ import java.util.LinkedList;
 
 import ua.svasilina.spedition.constants.Keys;
 import ua.svasilina.spedition.entity.Product;
+import ua.svasilina.spedition.utils.db.JsonObject;
 
 public abstract class IReport {
     long id;
     private String uuid;
     public Calendar leaveTime;
     Calendar doneDate;
-    public LinkedList<String> route;
+    public final LinkedList<String> route = new LinkedList<>();
+    public IReport(){
 
-    public IReport() {
-        route = new LinkedList<>();
+    }
+    public IReport(JsonObject parse) {
+        id = parse.getLongOrDefault(Keys.ID, -1);
+        uuid = parse.getString(Keys.UUID);
+        final long leave = parse.getLongOrDefault(Keys.LEAVE, -1);
+        if(leave != -1){
+            setLeaveTime(leave);
+        }
+        final long done = parse.getLongOrDefault(Keys.DONE, -1);
+        if (done != -1){
+            setDoneTime(done);
+        }
+        final String route = parse.getStringOrNull(Keys.ROUTE);
+        if (route != null){
+            setRoute(route);
+        }
     }
 
     public long getId() {

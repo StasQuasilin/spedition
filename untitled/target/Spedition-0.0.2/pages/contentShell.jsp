@@ -11,8 +11,8 @@
 <html lang="${locale}">
 <head>
     <title><fmt:message key="application.title"/></title>
-    <link rel="stylesheet" href="${context}/css/main.css"/>
-    <link rel="stylesheet" href="${context}/css/menu.css">
+    <link rel="stylesheet" href="${context}/css/main.css?v=${now}"/>
+    <link rel="stylesheet" href="${context}/css/menu.css?v=${now}">
     <script>
         if(typeof context == "undefined"){
             context = '${context}';

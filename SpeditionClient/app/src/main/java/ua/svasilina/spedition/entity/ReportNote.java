@@ -43,4 +43,11 @@ public class ReportNote implements Serializable, JsonAble {
         jsonObject.put(NOTE, note);
         return jsonObject;
     }
+
+    public void setTime(long millis) {
+        if (time == null){
+            time = Calendar.getInstance();
+        }
+        time.setTimeInMillis(millis);
+    }
 }

@@ -34,7 +34,7 @@ public class StorageUtil {
         }
     }
 
-    File[] getFiles(FileFilter fileFilter){
+    public File[] getFiles(FileFilter fileFilter){
         return context.getFilesDir().listFiles(fileFilter);
     }
 
@@ -72,5 +72,9 @@ public class StorageUtil {
             return syncs.length > 0;
         }
         return false;
+    }
+
+    public boolean fileExist(String fileName) {
+        return context.getFileStreamPath(fileName).exists();
     }
 }

@@ -7,7 +7,7 @@ public class FileFilter implements FilenameFilter {
 
     private final String mask;
 
-    FileFilter(String mask) {
+    public FileFilter(String mask) {
         this.mask = mask;
     }
 

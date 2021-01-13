@@ -8,4 +8,5 @@
     <color name="gray">#B3B3B3</color>
     <color name="someNew">#4CAF50</color>
     <color name="attentionText">#FF5722</color>
+    <color name="activeReport">#8BC34A</color>
 </resources>

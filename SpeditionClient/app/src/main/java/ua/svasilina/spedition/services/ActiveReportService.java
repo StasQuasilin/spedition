@@ -22,6 +22,7 @@ import ua.svasilina.spedition.activity.ReportEdit;
 import ua.svasilina.spedition.constants.Keys;
 
 import static ua.svasilina.spedition.constants.Keys.ID;
+import static ua.svasilina.spedition.constants.Keys.UUID;
 
 public class ActiveReportService extends Service {
 
@@ -41,8 +42,8 @@ public class ActiveReportService extends Service {
         final String route = intent.getStringExtra(Keys.ROUTE);
         final Context context = getApplicationContext();
         Intent editIntent = new Intent(context, ReportEdit.class);
-        final long id = intent.getLongExtra(ID, -1);
-        editIntent.putExtra(ID, id);
+        final String uuid = intent.getStringExtra(UUID);
+        editIntent.putExtra(ID, uuid);
 
         editIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

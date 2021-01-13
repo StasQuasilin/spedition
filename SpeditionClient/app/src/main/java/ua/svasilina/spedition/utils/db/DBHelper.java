@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "Db Helper";
 
     public DBHelper(@Nullable Context context) {
-        super(context, DB_NAME, null, 1);
+        super(context, DB_NAME, null, 3);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.i(TAG, "Create table 'Counterparty'");
         db.execSQL("create table " + Tables.COUNTERPARTY + " (" +
                 "id integer unique primary key autoincrement," +
-                "server_id integer unique," +
+                "server_id integer," +
                 "uuid text," +
                 "name text)");
         Log.i(TAG, "Create table 'Last sync'");
@@ -81,16 +81,16 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.i(TAG, "Create table 'Expenses'");
         db.execSQL("create table " + Tables.EXPENSES + " (" +
                 "id integer unique primary key autoincrement," +
-                "server_id integer unique," +
-                "report integer not null," +
+                "uuid text," +
+                "report text not null," +
                 "type integer," +
                 "description text," +
                 "amount integer)");
         Log.i(TAG, "Create table 'Report Notes'");
         db.execSQL("create table " + Tables.REPORT_NOTES + " (" +
                 "id integer unique primary key autoincrement," +
-                "server_id integer unique," +
-                "report integer not null," +
+                "uuid text," +
+                "report text not null," +
                 "time text," +
                 "note text)");
         Log.i(TAG, "Create table 'Location Log'");
@@ -118,6 +118,15 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG, "Old version: " + oldVersion + ", new version: " + newVersion);
+        if(oldVersion < 2){
+            db.execSQL("alter table " + Tables.EXPENSES +
+                    " add column uuid text");
+
+        }
+        if (oldVersion < 3){
+            db.execSQL("alter table " + Tables.REPORT_NOTES +
+                    " add column uuid text");
+        }
     }
 
     private void createWeightsTable(SQLiteDatabase db) {

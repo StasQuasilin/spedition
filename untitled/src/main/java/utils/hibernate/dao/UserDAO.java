@@ -6,6 +6,8 @@ import entity.User;
 import entity.UserAccess;
 import utils.hibernate.Hibernator;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import static constants.Keys.*;
@@ -43,6 +45,19 @@ public class UserDAO {
     }
 
     public List<User> getUsersBySupervisor(User supervisor) {
-        return hibernator.query(User.class, SUPERVISOR, supervisor);
+        HashMap<String, Object> param = new HashMap<>();
+        param.put(USER_SUPERVISOR, supervisor);
+        LinkedList<User> users = new LinkedList<>();
+        for (UserAccess access : hibernator.query(UserAccess.class, param)){
+            users.add(access.getUser());
+        }
+        return users;
+    }
+
+    public void removeUser(Object id) {
+        final UserAccess access = hibernator.get(UserAccess.class, "user", id);
+        if (access != null){
+            hibernator.remove(access);
+        }
     }
 }

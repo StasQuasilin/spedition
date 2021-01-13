@@ -23,7 +23,7 @@
     padding: 4px 8px;
     background-color: white;
     border-right: solid gray 1px;
-    margin-right: 2px;
+    /*margin-right: 2px;*/
     font-size: 10pt;
 }
 .menu-item:hover{

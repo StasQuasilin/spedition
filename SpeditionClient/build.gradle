@@ -1,7 +1,8 @@
 ext {
     var = 'Stas53721456'
-    var1 = 'key0'
-    var2 = '53721456'
+    var1 = 'upload2'
+    var2 = 'Stas53721456'
+    var3 = 'key0'
     defaultVersionCode = 6
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
@@ -13,7 +14,7 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:4.1.1'
         
 
         // NOTE: Do not place your application dependencies here; they belong
