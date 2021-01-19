@@ -3,7 +3,9 @@ package utils.hibernate.dao;
 import constants.Keys;
 import entity.Counterparty;
 import entity.Driver;
+import entity.references.ReferenceAction;
 import entity.references.ReferenceItem;
+import entity.references.ReferenceType;
 import utils.hibernate.DateContainers.GE;
 import utils.hibernate.Hibernator;
 
@@ -12,7 +14,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class DriverDAO implements ReferencesDAO {
+
     private final Hibernator hibernator = Hibernator.getInstance();
+    private final ReferencesItemDAO itemDAO = new ReferencesItemDAO();
 
     public Driver getDriverByUUID(Object uuid){
         return hibernator.get(Driver.class, Keys.UUID, uuid);
@@ -22,6 +26,7 @@ public class DriverDAO implements ReferencesDAO {
         hibernator.save(driver.getPerson());
         driver.setModificationTime(Timestamp.valueOf(LocalDateTime.now()));
         hibernator.save(driver);
+        itemDAO.updateAction(ReferenceType.driver, ReferenceAction.update, driver.getId());
     }
     public List<Driver> getAllList() {
         return hibernator.query(Driver.class, null);

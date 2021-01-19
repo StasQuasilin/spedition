@@ -20,7 +20,6 @@ public class BackgroundWorkerUtil {
 
     public void runWorker(Context context){
         stopWorker(context);
-
         OneTimeWorkRequest one = new OneTimeWorkRequest.Builder(BackgroundWorker.class)
                 .addTag(BackgroundWorker.TAG)
                 .setInitialDelay(DURATION, TimeUnit.SECONDS)

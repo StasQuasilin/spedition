@@ -60,4 +60,12 @@ public class UserDAO {
             hibernator.remove(access);
         }
     }
+
+    public void setVersionCode(String token, String version) {
+        final User user = getUserByToken(token);
+        if (user != null){
+            user.setAppVersion(version);
+            hibernator.save(user);
+        }
+    }
 }

@@ -32,5 +32,6 @@
         <mapping class="entity.UserAccess"/>
         <mapping class="entity.Expense"/>
         <mapping class="entity.ReportNote"/>
+        <mapping class="entity.references.ReferencesItemAction"/>
     </session-factory>
 </hibernate-configuration>

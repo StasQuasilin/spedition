@@ -3,6 +3,8 @@ package ua.svasilina.spedition.utils.db;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -71,79 +73,139 @@ public class DBUtil {
 //        data.put(Keys.DRIVERS, null);
         data.put(Keys.COUNTERPARTY, getLastSync(Tables.COUNTERPARTY, db));
 //        data.put(Keys.COUNTERPARTY, null);
+        data.put(Keys.VERSION, String.valueOf(getVersion()));
 
         Log.i(TAG, data.toString());
         sendJson(ApiLinks.SYNC_REFERENCES,
-                new JSONObject(data), new Response.Listener<JSONObject>() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Toast.makeText(context, "response receive", Toast.LENGTH_LONG).show();
-                        try {
-                            final String status = response.getString(Keys.STATUS);
-                            if (status.equals(Keys.SUCCESS)){
-                                final JSONArray products = response.getJSONArray(Keys.PRODUCTS);
-                                if (products.length() > 0) {
-                                    loadTitle.setText(R.string.sync_products);
-                                    loadProgress.setMax(products.length());
-                                    for (int i = 0; i < products.length(); i++) {
-                                        loadProgress.setProgress(i);
-                                        loadStatus.setText(i + "/" + products.length());
-                                        final int anInt = products.getInt(i);
-                                        syncProducts(anInt, db);
-                                        loadProgress.setProgress(i);
-                                    }
-                                    updateLastSync(Tables.PRODUCTS, db);
+            new JSONObject(data), new Response.Listener<JSONObject>() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onResponse(JSONObject response) {
+                try {
+                    final String status = response.getString(Keys.STATUS);
+                    if (status.equals(Keys.SUCCESS)){
+                        final JSONArray products = response.getJSONArray(Keys.PRODUCTS);
+                        if (products.length() > 0) {
+                            load(R.string.sync_products, products, new Loader() {
+                                @Override
+                                public void load(int id) {
+                                    syncProducts(id, db);
                                 }
-                                final JSONArray drivers = response.getJSONArray(Keys.DRIVERS);
-                                if (drivers.length() > 0){
-                                    loadTitle.setText(R.string.sync_drivers);
-                                    loadProgress.setMax(drivers.length());
-                                    for (int i = 0; i < drivers.length(); i++){
-                                        loadStatus.setText(i + "/" + drivers.length());
-                                        final int anInt = drivers.getInt(i);
-                                        syncDrivers(anInt, db);
-                                        loadProgress.setProgress(i);
-                                    }
-                                    updateLastSync(Tables.DRIVERS, db);
-                                }
-                                if(response.has(Keys.COUNTERPARTY)){
-                                    final JSONArray counterparty = response.getJSONArray(Keys.COUNTERPARTY);
-                                    final int length = counterparty.length();
-                                    if (length > 0){
-                                        loadTitle.setText(R.string.sync_counterparty);
-                                        loadProgress.setMax(length);
-                                        for (int i = 0; i < length; i++){
-                                            loadStatus.setText(i + "/" + length);
-                                            final int anInt = counterparty.getInt(i);
-                                            syncCounterparty(anInt, db);
-                                            loadProgress.setProgress(i);
-                                        }
-                                        updateLastSync(Tables.COUNTERPARTY, db);
-                                    }
-                                }
-                                Toast.makeText(context, R.string.sync_success, Toast.LENGTH_LONG).show();
-                                db.close();
-                                onDone.done();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            final String msg = context.getResources().getString(R.string.sync_error) + " " + e.getMessage();
-                            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-                            db.close();
-                            onDone.done();
+                            });
+                            updateLastSync(Tables.PRODUCTS, db);
                         }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        final String msg = context.getResources().getString(R.string.sync_error) + " " + error.getMessage();
-                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                        final JSONArray drivers = response.getJSONArray(Keys.DRIVERS);
+                        if (drivers.length() > 0){
+                            load(R.string.sync_drivers, drivers, new Loader() {
+                                @Override
+                                public void load(int id) {
+                                    syncDrivers(id, db);
+                                }
+                            });
+                            updateLastSync(Tables.DRIVERS, db);
+                        }
+                        if(response.has(Keys.COUNTERPARTY)){
+                            final JSONArray counterparty = response.getJSONArray(Keys.COUNTERPARTY);
+
+                            final int length = counterparty.length();
+                            if (length > 0){
+                                load(R.string.sync_counterparty, counterparty, new Loader() {
+                                    @Override
+                                    public void load(int id) {
+                                        syncCounterparty(id, db);
+                                    }
+                                });
+                                updateLastSync(Tables.COUNTERPARTY, db);
+                            }
+                        }
+                        Toast.makeText(context, R.string.sync_success, Toast.LENGTH_LONG).show();
                         db.close();
                         onDone.done();
                     }
-                });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    final String msg = context.getResources().getString(R.string.json_error) + " " + e.getMessage();
+                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                    db.close();
+                    onDone.done();
+                }
+                updateData(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    final String msg = context.getResources().getString(R.string.sync_error) + " " + error.getMessage();
+                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                    db.close();
+                    onDone.done();
+                }
+            });
+    }
+
+    private long getVersion() {
+        PackageInfo pInfo = null;
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        long versionCode;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            versionCode = pInfo.getLongVersionCode();
+        } else {
+            versionCode = pInfo.versionCode;
+        }
+        return versionCode;
+    }
+
+    private void updateData(JSONObject response) {
+        updateItems(response, Keys.P);
+        updateItems(response, Keys.D);
+        updateItems(response, Keys.C);
+    }
+
+    private void updateItems(JSONObject response, String key) {
+        if (response.has(key)) {
+            try {
+                final JSONObject jsonObject = response.getJSONObject(key);
+                final JSONArray update = jsonObject.getJSONArray(Keys.UPDATE);
+                final JSONArray remove = jsonObject.getJSONArray(Keys.REMOVE);
+
+                for (int i = 0; i < update.length(); i++) {
+                    final Object o = update.get(i);
+                    int id = Integer.parseInt(String.valueOf(o));
+
+                }
+                for (int i = 0; i < remove.length(); i++) {
+                    final Object o = remove.get(i);
+                    int id = Integer.parseInt(String.valueOf(o));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void load(int title, JSONArray array, Loader loader) {
+        loadTitle.setText(title);
+        final int length = array.length();
+        loadProgress.setMax(length);
+        for (int i = 0; i < length; i++) {
+            loadProgress.setProgress(i);
+            loadStatus.setText(i + "/" + length);
+            final int anInt;
+            try {
+                anInt = array.getInt(i);
+                loader.load(anInt);
+
+                loadProgress.setProgress(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void syncCounterparty(int anInt, final SQLiteDatabase db) {

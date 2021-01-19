@@ -86,4 +86,10 @@ public interface Keys {
     String DETAILS = "details";
     String COUNTERPARTY_WEIGHT = "counterpartyWeight";
     String FIELD = "field";
+    String P = "p";
+    String D = "d";
+    String C = "c";
+    String UPDATE = "update";
+    String REMOVE = "remove";
+    String VERSION = "version";
 }

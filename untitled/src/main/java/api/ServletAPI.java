@@ -25,7 +25,6 @@ public abstract class ServletAPI extends HttpServlet {
     }
 
     public void write(HttpServletResponse resp, JSONObject json) throws IOException {
-
         write(resp, json.toJSONString());
     }
 

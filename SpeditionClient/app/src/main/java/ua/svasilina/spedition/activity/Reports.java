@@ -25,6 +25,7 @@ import ua.svasilina.spedition.entity.OldReport;
 import ua.svasilina.spedition.entity.reports.Report;
 import ua.svasilina.spedition.entity.reports.SimpleReport;
 import ua.svasilina.spedition.utils.OldReportsUtil;
+import ua.svasilina.spedition.utils.background.BackgroundWorkerUtil;
 import ua.svasilina.spedition.utils.db.SqLiteReportUtil;
 
 public class Reports extends AppCompatActivity {
@@ -64,7 +65,6 @@ public class Reports extends AppCompatActivity {
                 break;
             }
         }
-
     }
 
     @Override
@@ -132,5 +132,16 @@ public class Reports extends AppCompatActivity {
             backToast.show();
         }
         backPressedTime = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BackgroundWorkerUtil.getInstance().runWorker(getApplicationContext());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

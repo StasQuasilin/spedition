@@ -24,14 +24,13 @@ android {
         applicationId 'ua.svasilina.spedition'
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 21
+        versionCode 23
         versionName '1.11'
         setProperty("archivesBaseName", "spedition-$versionCode")
         generatedDensities = []
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
-        vectorDrawables.useSupportLibrary = true
     }
     aaptOptions {
         additionalParameters "--no-version-vectors"

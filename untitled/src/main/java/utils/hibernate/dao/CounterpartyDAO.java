@@ -2,7 +2,9 @@ package utils.hibernate.dao;
 
 import constants.Keys;
 import entity.Counterparty;
+import entity.references.ReferenceAction;
 import entity.references.ReferenceItem;
+import entity.references.ReferenceType;
 import utils.hibernate.DateContainers.GE;
 import utils.hibernate.DateContainers.LE;
 import utils.hibernate.Hibernator;
@@ -15,6 +17,7 @@ import java.util.List;
 public class CounterpartyDAO implements ReferencesDAO {
 
     private final Hibernator hibernator = Hibernator.getInstance();
+    private final ReferencesItemDAO itemDAO = new ReferencesItemDAO();
 
     public List<Counterparty> getList() {
         return hibernator.query(Counterparty.class, null);
@@ -31,6 +34,7 @@ public class CounterpartyDAO implements ReferencesDAO {
     public void save(Counterparty counterparty) {
         counterparty.setLastChange(Timestamp.valueOf(LocalDateTime.now()));
         hibernator.save(counterparty);
+        itemDAO.updateAction(ReferenceType.counterparty, ReferenceAction.update, counterparty.getId());
     }
 
     @Override

@@ -20,6 +20,7 @@ import java.util.TimerTask;
 import ua.svasilina.spedition.R;
 import ua.svasilina.spedition.activity.ReportEdit;
 import ua.svasilina.spedition.constants.Keys;
+import ua.svasilina.spedition.utils.background.BackgroundWorkerUtil;
 
 import static ua.svasilina.spedition.constants.Keys.ID;
 import static ua.svasilina.spedition.constants.Keys.UUID;
@@ -41,6 +42,7 @@ public class ActiveReportService extends Service {
         createNotificationChannel();
         final String route = intent.getStringExtra(Keys.ROUTE);
         final Context context = getApplicationContext();
+        BackgroundWorkerUtil.getInstance().runWorker(context);
         Intent editIntent = new Intent(context, ReportEdit.class);
         final String uuid = intent.getStringExtra(UUID);
         editIntent.putExtra(ID, uuid);

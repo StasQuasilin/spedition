@@ -28,7 +28,7 @@ public class ProductDAO implements ReferencesDAO {
     private int[] build(List<Product> products) {
         int[] ints = new int[products.size()];
         for (int i = 0; i < products.size(); i++){
-            ints[i] =products.get(i).getId();
+            ints[i] = products.get(i).getId();
         }
         return ints;
     }

@@ -4,10 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.UUID;
 
@@ -30,7 +30,14 @@ public class SqLiteReportUtil extends AbstractReportUtil {
     private static final String PRODUCT_COLUMN = "product";
     private static final String SEPARATED_PRODUCT_COLUMN = "separated_products";
     private final String[] simpleReportFields = new String[]{
-            ID_COLUMN, Keys.UUID, LEAVE_COLUMN, DONE_COLUMN, ROUTE_COLUMN, PRODUCT_COLUMN, SEPARATED_PRODUCT_COLUMN
+            ID_COLUMN,
+            Keys.UUID,
+            LEAVE_COLUMN,
+            DONE_COLUMN,
+            ROUTE_COLUMN,
+            PRODUCT_COLUMN,
+            SEPARATED_PRODUCT_COLUMN,
+            SYNC_COLUMN
     };
     private final ExpensesUtil expensesUtil;
     private final ReportDetailUtil detailUtil;
@@ -41,6 +48,7 @@ public class SqLiteReportUtil extends AbstractReportUtil {
     private final DBHelper dbHelper;
     private final SqlReportParser reportParser;
     private final SimpleParser simpleParser;
+    private static final int LIST_SIZE = 10;
 
     public SqLiteReportUtil(Context context) {
         super(context);
@@ -54,11 +62,13 @@ public class SqLiteReportUtil extends AbstractReportUtil {
         syncUtil = new SyncUtil(context, this);
     }
 
+    private static final String[] NON_SYNC = new String[]{String.valueOf(0)};
+
     @Override
     Report[] getNotSyncReports() {
 
         final SQLiteDatabase database = dbHelper.getReadableDatabase();
-        final Cursor query = database.query(Tables.REPORTS, null, SYNC_COLUMN + "=?", new String[]{String.valueOf(false)}, null, null, null);
+        final Cursor query = database.query(Tables.REPORTS, null, SYNC_COLUMN + "=?", NON_SYNC, null, null, null);
         Report[] reports = new Report[query.getCount()];
         int i = 0;
         if (query.moveToFirst()){
@@ -66,7 +76,6 @@ public class SqLiteReportUtil extends AbstractReportUtil {
             do {
                 reports[i++] = reportParser.parse(query);
             } while (query.moveToNext());
-
         }
 
         database.close();
@@ -76,17 +85,20 @@ public class SqLiteReportUtil extends AbstractReportUtil {
     @Override
     String[] getRemovedReports() {
         final SQLiteDatabase database = dbHelper.getReadableDatabase();
-
-        final Cursor query = database.query(Tables.REMOVE_REPORTS, null, null, null, null, null, null);
-        String[] result = new String[query.getCount()];
-        if (query.moveToFirst()){
-            int i = 0;
-            final int idColumn = query.getColumnIndex(ID_COLUMN);
-            do {
-                result[i++] = query.getString(idColumn);
-            } while (query.moveToNext());
+        String[] result = new String[0];
+        try {
+            final Cursor query = database.query(Tables.REMOVE_REPORTS, null, null, null, null, null, null);
+            result = new String[query.getCount()];
+            if (query.moveToFirst()) {
+                int i = 0;
+                final int idColumn = query.getColumnIndex(ID_COLUMN);
+                do {
+                    result[i++] = query.getString(idColumn);
+                } while (query.moveToNext());
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
-
         database.close();
         return result;
     }
@@ -110,10 +122,17 @@ public class SqLiteReportUtil extends AbstractReportUtil {
         final LinkedList<SimpleReport> reports = new LinkedList<>();
         final SQLiteDatabase database = dbHelper.getReadableDatabase();
         final Cursor query = database.query(Tables.REPORTS, simpleReportFields, null, null, null, null, null);
+        final HashMap<String, Boolean> isSyncMap = new HashMap<>();
         if(query.moveToFirst()){
+
             simpleParser.init(query);
+            int isSyncColumn = query.getColumnIndex(SYNC_COLUMN);
+
             do {
-                reports.add(simpleParser.parse(query));
+                final SimpleReport report = simpleParser.parse(query);
+                reports.add(report);
+                final int sync = query.getInt(isSyncColumn);
+                isSyncMap.put(report.getUuid(), sync == 1);
             } while (query.moveToNext());
         }
 
@@ -122,12 +141,21 @@ public class SqLiteReportUtil extends AbstractReportUtil {
         }
         database.close();
         Collections.sort(reports);
+
+        int removeItems = reports.size() - LIST_SIZE;
+        for (int i = reports.size() - 1; i >= 0 && removeItems > 0; i--){
+            final SimpleReport report = reports.get(i);
+            final String uuid = report.getUuid();
+            if (report.isDone() && isSyncMap.containsKey(uuid)){
+                removeItems--;
+                removeReport(uuid, false);
+            }
+        }
         return reports;
     }
 
     @Override
     public Report getReport(String uuid){
-        Log.i("Open report", uuid);
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
         final Cursor query = db.query(Tables.REPORTS, null, DBConstants.UUID_PARAM, new String[]{uuid}, null, null, null, ONE_ROW);
         if (query.moveToFirst()){
@@ -183,9 +211,10 @@ public class SqLiteReportUtil extends AbstractReportUtil {
         expensesUtil.saveExpenses(uuid, report.getExpenses(), ExpenseType.expense);
         expensesUtil.saveExpenses(uuid, report.getFares(), ExpenseType.fare);
         noteUtil.saveNotes(uuid, report.getNotes());
+        syncUtil.saveThread(report);
     }
 
-    public boolean removeReport(String id) {
+    public boolean removeReport(String id, boolean remoteRemove) {
         String[] par = new String[]{id};
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -194,11 +223,14 @@ public class SqLiteReportUtil extends AbstractReportUtil {
         db.delete(Tables.REPORT_DETAILS, DBConstants.REPORT_UUID, par);
         db.delete(Tables.REPORT_FIELDS, DBConstants.REPORT_UUID, par);
         db.delete(Tables.REPORT_NOTES, DBConstants.REPORT_UUID, par);
-        if (delete > 0) {
+        db.delete(Tables.EXPENSES, DBConstants.REPORT_UUID, par);
+        //weights
+        if (remoteRemove && delete > 0) {
             final ContentValues cv = new ContentValues();
-            cv.put(ID_COLUMN, id);
+            cv.put(Keys.ID, id);
             db.insert(Tables.REMOVE_REPORTS, null, cv);
         }
+        db.close();
         return delete > 0;
     }
 

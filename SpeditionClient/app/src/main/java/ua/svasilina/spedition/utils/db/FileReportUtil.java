@@ -97,7 +97,7 @@ public class FileReportUtil extends AbstractReportUtil {
     }
 
     @Override
-    public boolean removeReport(String id) {
+    public boolean removeReport(String id, boolean b) {
         return false;
     }
 }

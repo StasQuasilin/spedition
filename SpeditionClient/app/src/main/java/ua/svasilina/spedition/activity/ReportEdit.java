@@ -207,11 +207,10 @@ public class ReportEdit extends AppCompatActivity {
         });
         final View reportRemove = findViewById(R.id.reportRemove);
         if (uuid != null) {
-            final String finalUuid = uuid;
             reportRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new ReportRemoveDialog(context, finalUuid).show(getSupportFragmentManager(), "RM");
+                    new ReportRemoveDialog(context, uuid).show(getSupportFragmentManager(), "RM");
                 }
             });
         } else {
@@ -226,25 +225,12 @@ public class ReportEdit extends AppCompatActivity {
                 showWeightDialog();
             }
         });
-        updateWeightButton();
-    }
-
-    private void updateWeightButton() {
-//        final Weight weight = null;//report.getWeight();
-//        if (weight == null){
-//            weightButton.setVisibility(View.GONE);
-//        } else {
-//            weightButton.setVisibility(View.VISIBLE);
-//
-//            weightButton.setText(weightStringBuilder.build(weight));
-//        }
     }
 
     private void showWeightDialog() {
         new DriverWeightDialog(report.getDetails(), getApplicationContext(), new CustomListener() {
             @Override
             public void onChange() {
-                updateWeightButton();
                 updateDriverButtonValue();
                 save(false);
             }
@@ -511,12 +497,7 @@ public class ReportEdit extends AppCompatActivity {
             DoneReportDialog drd = new DoneReportDialog(getLayoutInflater(), report, new CustomListener() {
                 @Override
                 public void onChange() {
-                    save(false);
-                    final Context context = getApplicationContext();
-                    final Intent intent = new Intent(context, ReportShow.class);
-                    intent.putExtra(ID, report.getId());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+                save(true);
                 }
             });
             drd.show(getSupportFragmentManager(), "Done dialog");

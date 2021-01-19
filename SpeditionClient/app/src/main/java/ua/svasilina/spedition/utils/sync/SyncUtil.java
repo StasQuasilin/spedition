@@ -11,9 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import ua.svasilina.spedition.constants.ApiLinks;
 import ua.svasilina.spedition.constants.Keys;
@@ -40,27 +38,6 @@ public class SyncUtil {
         loginUtil  = new LoginUtil(context);
     }
 
-    private boolean runTimer;
-
-    public void sync(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                runTimer = false;
-//                for (Report r : reportsUtil.getUnSyncReports()){
-//                    sendReport(r, false);
-//                }
-//
-//                for (String item : reportsUtil.getRemoved()){
-//                    remove(item, false);
-//                }
-                if (runTimer){
-                    runBackground();
-                }
-            }
-        }).start();
-    }
-
     public void remove(final String uuid, final boolean runBackground) {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put(Keys.REPORT, uuid);
@@ -83,7 +60,6 @@ public class SyncUtil {
                 if(runBackground){
                     runBackground();
                 } else {
-                    runTimer = true;
                 }
             }
         });
@@ -108,8 +84,6 @@ public class SyncUtil {
         }
     }
 
-    private final Set<Integer> nowSync = new HashSet<>();
-
     public void sendReport(final Report report, final boolean runBackground){
         if (report != null) {
             final JSONObject object = new JSONObject(report.toJson());
@@ -133,7 +107,6 @@ public class SyncUtil {
                     if (runBackground){
                         runBackground();
                     } else {
-                        runTimer = true;
                     }
                 }
             });
@@ -163,6 +136,7 @@ public class SyncUtil {
                 for (String report : removeIds){
                     remove(report, false);
                 }
+
             }
         }).start();
     }

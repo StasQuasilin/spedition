@@ -9,5 +9,5 @@ public interface IReportUtil {
     List<SimpleReport> getReports();
     Report getReport(String uuid);
     void saveReport(Report report);
-    boolean removeReport(String id);
+    boolean removeReport(String id, boolean b);
 }

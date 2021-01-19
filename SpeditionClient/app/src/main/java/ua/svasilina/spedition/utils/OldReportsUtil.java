@@ -317,7 +317,6 @@ public class OldReportsUtil {
     public void sync() {
 //        Log.i(TAG, "Sync Storage");
 //        Toast.makeText(context, R.string.sync, Toast.LENGTH_LONG).show();
-        syncUtil.sync();
     }
 
     public void removeReport(String uuid) {

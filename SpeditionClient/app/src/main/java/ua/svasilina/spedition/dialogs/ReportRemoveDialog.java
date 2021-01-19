@@ -48,7 +48,7 @@ public class ReportRemoveDialog extends DialogFragment {
     }
 
     private void removeReport() {
-        if(reportsUtil.removeReport(uuid)) {
+        if(reportsUtil.removeReport(uuid, true)) {
             Intent intent = new Intent(context, Reports.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);

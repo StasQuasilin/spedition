@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import ua.svasilina.spedition.R;
 import ua.svasilina.spedition.dialogs.LoginDialog;
 import ua.svasilina.spedition.utils.LoginUtil;
+import ua.svasilina.spedition.utils.background.BackgroundWorkerUtil;
 import ua.svasilina.spedition.utils.background.OnActiveReport;
 import ua.svasilina.spedition.utils.db.AbstractReportUtil;
 import ua.svasilina.spedition.utils.db.DBUtil;
@@ -29,6 +30,8 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Context context = getApplicationContext();
+
+        BackgroundWorkerUtil.getInstance().stopWorker(context);
 
         loginUtil = new LoginUtil(context);
 
@@ -54,7 +57,7 @@ public class StartActivity extends AppCompatActivity {
             LoginDialog.showLoginDialog(context, getSupportFragmentManager(), new OnDone(){
                 @Override
                 public void done() {
-                    checkToken(context);
+                checkToken(context);
                 }
             });
         }
@@ -76,5 +79,11 @@ public class StartActivity extends AppCompatActivity {
             }
         });
         onActiveReport.checkReports();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }
