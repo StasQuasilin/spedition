@@ -17,10 +17,8 @@ public abstract class SearchUtil<T> {
     final String searchPhrase;
     final int insertsCount;
     final String[] p;
-    private final Context context;
 
     public SearchUtil(Context context, ItemParser<T> parser){
-        this.context = context;
         helper = new DBHelper( context);
         this.parser = parser;
         searchPhrase = getSearchPhrase();

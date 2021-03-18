@@ -12,10 +12,12 @@ monthReport = new Vue({
         loading:false
     },
     mounted:function(){
-        console.log('Mount');
         this.date.setDate(1);
     },
     methods:{
+        show:function(id){
+            loadModal(this.api.show,{id: id});
+        },
         dateOffset:function (dir) {
             this.date.setMonth(this.date.getMonth() + dir);
             this.getReports();

@@ -15,10 +15,9 @@ import ua.svasilina.spedition.R;
 
 public class ReportNotCompletedDialog extends DialogFragment {
 
-    final boolean e1, e2, e3, e4;
+    final boolean e2, e3, e4;
 
-    public ReportNotCompletedDialog(boolean driver, boolean route, boolean leave, boolean fields) {
-        this.e1 = driver;
+    public ReportNotCompletedDialog(boolean route, boolean leave, boolean fields) {
         this.e2 = route;
         this.e3 = leave;
         this.e4 = fields;
@@ -34,11 +33,7 @@ public class ReportNotCompletedDialog extends DialogFragment {
         LinearLayout view = new LinearLayout(context);
         view.setOrientation(LinearLayout.VERTICAL);
         view.setPadding(24, 0, 4, 0);
-        if (e1){
-            TextView textView = new TextView(context);
-            textView.setText(R.string.drivers);
-            view.addView(textView);
-        }
+
         if (e2){
             TextView textView = new TextView(context);
             textView.setText(R.string.route);

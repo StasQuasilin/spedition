@@ -24,7 +24,6 @@ import java.util.UUID;
 import ua.svasilina.spedition.R;
 import ua.svasilina.spedition.adapters.CustomAdapter;
 import ua.svasilina.spedition.adapters.SimpleListAdapter;
-import ua.svasilina.spedition.constants.Keys;
 import ua.svasilina.spedition.entity.Driver;
 import ua.svasilina.spedition.entity.Person;
 import ua.svasilina.spedition.entity.ReportDetail;
@@ -32,6 +31,8 @@ import ua.svasilina.spedition.utils.AdapterItemEditInterface;
 import ua.svasilina.spedition.utils.CustomAdapterBuilder;
 import ua.svasilina.spedition.utils.CustomListener;
 import ua.svasilina.spedition.utils.search.DriverSearchUtil;
+
+import static ua.svasilina.spedition.constants.Keys.SPACE;
 
 public class DriversManageDialog extends DialogFragment {
 
@@ -79,7 +80,7 @@ public class DriversManageDialog extends DialogFragment {
                             public void onChange() {
 
                             }
-                        }).show(getParentFragmentManager(), "DED");
+                        }).show(getParentFragmentManager(), null);
                     }
                 });
             }
@@ -111,7 +112,14 @@ public class DriversManageDialog extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if(before < count) {
+                    int index = start + before;
+                    final char c = s.charAt(index);
+                    if (!Character.isAlphabetic(c)) {
+                        final Editable text = driverInput.getText();
+                        text.replace(index, index + 1, SPACE);
+                    }
+                }
             }
 
             @Override
@@ -155,7 +163,7 @@ public class DriversManageDialog extends DialogFragment {
     }
 
     private void parseDriver(){
-        final String[] split = driverInput.getText().toString().trim().split(Keys.SPACE);
+        final String[] split = driverInput.getText().toString().trim().split(SPACE);
         Driver driver = new Driver();
         driver.setUuid(UUID.randomUUID().toString());
         final Person person = driver.getPerson();

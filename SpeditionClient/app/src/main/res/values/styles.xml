@@ -30,7 +30,7 @@
     <style name="AlertDialogCustom" parent="Theme.AppCompat.Dialog.Alert">
 <!--        <item name="android:textColorHint">#FF00F0</item>-->
 <!--        <item name="textInputStyle">@style/TextColor</item>-->
-        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:background">@color/white</item>
 <!--        <item name="android:textColor">#FF00F0</item>-->
 <!--        <item name="android:textColorPrimary">#FFC107</item>-->
         <item name="android:listViewStyle">@style/ListView</item>
@@ -47,4 +47,5 @@
     </style>
 
     <color name="whiteText">#EEEEEE</color>
+    <color name="white">#FFFFFF</color>
 </resources>

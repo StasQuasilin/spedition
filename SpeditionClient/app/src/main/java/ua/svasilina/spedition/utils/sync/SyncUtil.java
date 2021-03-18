@@ -87,27 +87,21 @@ public class SyncUtil {
     public void sendReport(final Report report, final boolean runBackground){
         if (report != null) {
             final JSONObject object = new JSONObject(report.toJson());
-            sendJson(ApiLinks.REPORT_SAVE, object, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        final String status = response.getString(STATUS);
-                        if (status.equals(SUCCESS)) {
-                            final String uuid = response.getString(UUID);
-                            reportsUtil.markSync(uuid);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+
+            sendJson(ApiLinks.REPORT_SAVE, object, response -> {
+                try {
+                    final String status = response.getString(STATUS);
+                    if (status.equals(SUCCESS)) {
+                        final String uuid = response.getString(UUID);
+                        reportsUtil.markSync(uuid);
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    if (runBackground){
-                        runBackground();
-                    } else {
-                    }
+            }, error -> {
+                error.printStackTrace();
+                if (runBackground){
+                    runBackground();
                 }
             });
         }
@@ -118,26 +112,18 @@ public class SyncUtil {
     }
 
     public void saveThread(final Report report) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                sendReport(report, true);
-            }
-        }).start();
+        new Thread(() -> sendReport(report, true)).start();
     }
 
     public void sendReports(final Report[] reports, final String[] removeIds) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (Report report : reports){
-                    sendReport(report, false);
-                }
-                for (String report : removeIds){
-                    remove(report, false);
-                }
-
+        new Thread(() -> {
+            for (Report report : reports){
+                sendReport(report, false);
             }
+            for (String report : removeIds){
+                remove(report, false);
+            }
+
         }).start();
     }
 }

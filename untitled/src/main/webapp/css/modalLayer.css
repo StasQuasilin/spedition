@@ -7,9 +7,9 @@
 }
 .modal-body{
     margin: auto;
-    position: absolute;
-    top: 50%;
-    bottom: 50%;
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*bottom: 50%;*/
     left: 0;
     right: 0;
     width: fit-content;
@@ -34,5 +34,6 @@
     float: right;
 }
 .modal-data{
-    padding: 4px;
+    /*padding: 6pt;*/
+
 }

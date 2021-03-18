@@ -80,14 +80,14 @@
     <string name="fixArriveTime">Зафіксувати час прибуття</string>
     <string name="sync">Синхронізація</string>
     <string name="syncList">Синхронізації</string>
-    <string name="sync_queston">Синхронізувати дані з сервером перед початком роботи?</string>
+    <string name="sync_question">Синхронізувати дані з сервером перед початком роботи?</string>
     <string name="yes">Так</string>
     <string name="no">Ні</string>
     <string name="Y">Y</string>
     <string name="plus">+</string>
     <string name="driver_add">Додати водія</string>
     <string name="times">✕</string>
-    <string name="press_for_driver">Натисніть для редагування даних водія</string>
+    <string name="press_for_driver">Натисніть для редагування</string>
     <string name="driver_add_info">Додати інформацію про водія</string>
     <string name="detail_edit_title">Дані перевезення</string>
     <string name="long_string">ABSDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^*</string>
@@ -111,9 +111,15 @@
     <string name="sync_title">Синхронізація</string>
     <string name="press_for_open">Торкніться щоб відкрити</string>
     <string name="driver_edit_attention">Увага! Цей діалог призначений для редагування
-        некоректних даних уже збереженого в базі водія. Змін</string>
+        некоректних даних уже збереженого в базі водія.</string>
     <string name="newDriver">Додати нового водія</string>
     <string name="route_hint">Введіть назву міста</string>
     <string name="add_point">Додати точку відвантаження</string>
     <string name="json_error">Некоректний формат відповіді</string>
+    <string name="attention">Увага!</string>
+    <string name="alert_active_report_text">Для створення нового відрядження необхідно завершити попереднє.</string>
+    <string name="alert_active_report_text_ps">Також попереднє відрядження можна видалити.</string>
+    <string name="alert">Alert</string>
+    <string name="open_report">Відкрити звіт</string>
+    <string name="points">Точки відвантаження</string>
 </resources>

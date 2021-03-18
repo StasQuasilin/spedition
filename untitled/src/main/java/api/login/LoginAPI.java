@@ -25,10 +25,8 @@ public class LoginAPI extends ServletAPI {
         final JSONObject body = parseBody(req);
         Answer answer;
         if (body != null){
-            System.out.println(body);
             String phone = String.valueOf(body.get(PHONE));
             final UserAccess access = userDAO.getUserAccessByPhone(phone);
-
             if (access != null){
                 String password = String.valueOf(body.get(PASSWORD));
                 if (access.getPassword().equals(password)){

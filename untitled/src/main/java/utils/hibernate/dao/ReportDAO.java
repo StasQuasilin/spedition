@@ -47,7 +47,7 @@ public class ReportDAO {
         final Role role = user.getRole();
         if (role == Role.supervisor){
             params.put("owner/supervisor", user);
-        } else {
+        } else if(role == Role.user){
             params.put("owner", user);
         }
 

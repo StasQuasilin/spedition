@@ -1,7 +1,6 @@
 package ua.svasilina.spedition.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +14,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ua.svasilina.spedition.R;
-import ua.svasilina.spedition.activity.ReportEdit;
-import ua.svasilina.spedition.activity.ReportShow;
 import ua.svasilina.spedition.entity.Driver;
+import ua.svasilina.spedition.entity.Person;
 import ua.svasilina.spedition.entity.Product;
 import ua.svasilina.spedition.entity.reports.SimpleReport;
+import ua.svasilina.spedition.utils.Opener;
 import ua.svasilina.spedition.utils.builders.DateTimeBuilder;
 
 import static ua.svasilina.spedition.constants.Keys.ARROW;
 import static ua.svasilina.spedition.constants.Keys.COMA;
+import static ua.svasilina.spedition.constants.Keys.DOT_3;
 import static ua.svasilina.spedition.constants.Keys.EMPTY;
-import static ua.svasilina.spedition.constants.Keys.ID;
+import static ua.svasilina.spedition.constants.Keys.PLUS;
 import static ua.svasilina.spedition.constants.Keys.SPACE;
 import static ua.svasilina.spedition.constants.Patterns.DATE_PATTERN;
 
@@ -60,7 +60,7 @@ public class ReportListAdapter extends ArrayAdapter<SimpleReport> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                open(report);
+                Opener.openReport(context, report.isDone(), report.getUuid());
             }
         });
 
@@ -71,7 +71,6 @@ public class ReportListAdapter extends ArrayAdapter<SimpleReport> {
         } else {
             dateView.setText(EMPTY);
         }
-
 
         final TextView check = view.findViewById(R.id.check);
 
@@ -86,14 +85,21 @@ public class ReportListAdapter extends ArrayAdapter<SimpleReport> {
         final TextView driverView = view.findViewById(R.id.driver);
         if (drivers.size() > 0){
             StringBuilder builder = new StringBuilder();
-            for(int i = 0; i < drivers.size(); i++){
+            for(int i = 0; i < Math.min(drivers.size(), 3); i++){
                 final Driver driver = drivers.get(i);
                 if(driver != null) {
-                    builder.append(driver.getPerson().getSurname());
+                    final Person person = driver.getPerson();
+                    builder.append(person.getSurname());
+                    if (drivers.size() < 3){
+                        builder.append(SPACE).append(person.getForename());
+                    }
                     if (i < drivers.size() - 1) {
                         builder.append(COMA).append(SPACE);
                     }
                 }
+            }
+            if (drivers.size() > 3){
+                builder.append(DOT_3).append(PLUS).append(drivers.size() - 3);
             }
             driverView.setText(builder.toString().toUpperCase());
         } else {
@@ -132,16 +138,5 @@ public class ReportListAdapter extends ArrayAdapter<SimpleReport> {
         return view;
     }
 
-    private void open(SimpleReport report) {
-        Intent intent = new Intent();
-        if (report.isDone()){
-            intent.setClass(context, ReportShow.class);
-        } else {
-            intent.setClass(context, ReportEdit.class);
-        }
 
-        intent.putExtra(ID, report.getUuid());
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
 }

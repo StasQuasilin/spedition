@@ -33,6 +33,7 @@ import static ua.svasilina.spedition.constants.Keys.FIELDS;
 import static ua.svasilina.spedition.constants.Keys.FONE;
 import static ua.svasilina.spedition.constants.Keys.ID;
 import static ua.svasilina.spedition.constants.Keys.LEAVE;
+import static ua.svasilina.spedition.constants.Keys.MODIFY;
 import static ua.svasilina.spedition.constants.Keys.NOTES;
 import static ua.svasilina.spedition.constants.Keys.PER_DIEM;
 import static ua.svasilina.spedition.constants.Keys.PRODUCT;
@@ -51,6 +52,7 @@ public class Report extends IReport implements JsonAble, Serializable, Comparabl
     final public ArrayList<Expense> fares = new ArrayList<>();
     final public ArrayList<ReportNote> notes = new ArrayList<>();
     private boolean fone;
+    private long modify;
 
 
     public Report(JsonObject parse, Context context) {
@@ -148,6 +150,14 @@ public class Report extends IReport implements JsonAble, Serializable, Comparabl
         this.fone = fone;
     }
 
+    public void setModify(long modify) {
+        this.modify = modify;
+    }
+
+    public long getModify() {
+        return modify;
+    }
+
     @Override
     public JSONObject toJson() {
         JSONObject json  = new JSONObject();
@@ -172,6 +182,7 @@ public class Report extends IReport implements JsonAble, Serializable, Comparabl
         json.put(PER_DIEM, perDiem);
         json.put(FONE, fone);
         json.put(NOTES, notes());
+        json.put(MODIFY, modify);
 
         return json;
     }

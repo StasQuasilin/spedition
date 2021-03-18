@@ -24,6 +24,7 @@ public class Report extends JsonAble implements Comparable<Report> {
     private Product product;
     private Timestamp done;
     private User owner;
+    private Timestamp modify;
 
     private Driver driver;
     private Weight weight;
@@ -157,6 +158,15 @@ public class Report extends JsonAble implements Comparable<Report> {
         this.perDiem = perDiem;
     }
 
+    @Basic
+    @Column(name = "_modify")
+    public Timestamp getModify() {
+        return modify;
+    }
+    public void setModify(Timestamp modify) {
+        this.modify = modify;
+    }
+
     @Override
     public JSONObject toSimpleJson() {
         JSONObject json = getJsonObject();
@@ -195,7 +205,6 @@ public class Report extends JsonAble implements Comparable<Report> {
         if (weight != null){
             json.put(WEIGHT, weight.toJson());
         }
-
         json.put(FARES, fares());
         json.put(EXPENSES, expenses());
         json.put(PER_DIEM, perDiem);

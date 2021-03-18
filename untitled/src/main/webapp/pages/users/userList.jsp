@@ -12,17 +12,30 @@
 <html>
     <div>
         <c:forEach items="${users}" var="usr">
-            <div>
+            <div style="padding: 4pt; border-bottom: solid gray 1pt">
+                <div>
                 <span class="modal-close-button" onclick="loadModal('${delete}', {id:${usr.id}})">
                     &times;
                 </span>
-                <span>
-                    ${usr.person.value}
-                </span>
+                    <span>
+                        ${usr.person.value}
+                    </span>
+                </div>
+                <div style="font-size: 8pt">
+                    app version:
+                    <c:choose>
+                        <c:when test="${not empty usr.appVersion}">
+                            ${usr.appVersion}
+                        </c:when>
+                        <c:otherwise>
+                            < 24
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
         </c:forEach>
     </div>
-    <div style="width: 100%; text-align: center">
+    <div style="width: 100%; text-align: center; padding: 4pt">
         <button onclick="loadModal('${registration}')">
             <fmt:message key="registration"/>
         </button>

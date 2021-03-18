@@ -192,6 +192,9 @@ public class SqLiteReportUtil extends AbstractReportUtil {
             cv.put(ROUTE_COLUMN, route);
         }
         cv.put(SYNC_COLUMN, false);
+        final long modify = Calendar.getInstance().getTimeInMillis();
+        report.setModify(modify);
+        cv.put(Keys.MODIFY, modify);
 
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -207,7 +210,6 @@ public class SqLiteReportUtil extends AbstractReportUtil {
         detailUtil.saveDetails(report);
 
         reportFieldUtil.saveFields(report);
-        syncUtil.saveThread(report);
         expensesUtil.saveExpenses(uuid, report.getExpenses(), ExpenseType.expense);
         expensesUtil.saveExpenses(uuid, report.getFares(), ExpenseType.fare);
         noteUtil.saveNotes(uuid, report.getNotes());
@@ -248,6 +250,7 @@ public class SqLiteReportUtil extends AbstractReportUtil {
             simpleParser.init(query);
             do{
                 report = simpleParser.parse(query);
+                db.close();
                 if (report.getLeaveTime() != null){
                     return report;
                 }

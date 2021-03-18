@@ -66,7 +66,7 @@ public interface Keys {
     String PRODUCTS = "products";
     String SERVER_ID = "server_id";
     String DRIVERS = "drivers";
-    String ARROW = " ➞ ";
+    String ARROW = "-";
     String REMOVE = "remove";
     String NEW_ROW = "\n";
     String DETAILS = "details";
@@ -80,4 +80,5 @@ public interface Keys {
     String C = "c";
     String UPDATE = "update";
     String VERSION = "version";
+    String MODIFY = "modify";
 }

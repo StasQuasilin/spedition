@@ -16,12 +16,15 @@ import static constants.Keys.TITLE;
 
 @WebServlet(Links.MONTH_REPORT)
 public class MonthReport extends Controller {
+
     private static final String _CONTENT = "/pages/reports/monthReport.jsp";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute(TITLE, "title.month.report");
         req.setAttribute(CONTENT, _CONTENT);
+        req.setAttribute(Keys.SHOW, Links.SHOW_REPORT);
+        req.setAttribute(Keys.REPORTS, Links.REPORTS);
         req.setAttribute(Keys.GET_REPORTS, ApiLinks.GET_REPORTS);
         show(req, resp);
     }

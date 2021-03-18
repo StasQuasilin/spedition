@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "Db Helper";
 
     public DBHelper(@Nullable Context context) {
-        super(context, DB_NAME, null, 3);
+        super(context, DB_NAME, null, 4);
     }
 
     @Override
@@ -55,7 +55,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "separated_products boolean," +
                 "per_diem integer," +
                 "fone boolean," +
-                "is_sync boolean)");
+                "is_sync boolean," +
+                "modify long)");
         Log.i(TAG, "Create table 'Report Details'");
         db.execSQL("create table " + Tables.REPORT_DETAILS + " (" +
                 "id integer unique primary key autoincrement," +
@@ -126,6 +127,10 @@ public class DBHelper extends SQLiteOpenHelper {
         if (oldVersion < 3){
             db.execSQL("alter table " + Tables.REPORT_NOTES +
                     " add column uuid text");
+        }
+        if (oldVersion < 4){
+            db.execSQL("alter table " + Tables.REPORTS +
+                    " add column modify long");
         }
     }
 

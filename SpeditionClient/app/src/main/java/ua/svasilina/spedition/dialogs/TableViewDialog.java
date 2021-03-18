@@ -26,7 +26,7 @@ public class TableViewDialog extends DialogFragment {
     private final Context context;
     private final LayoutInflater inflater;
     private final String table;
-    private DBHelper helper;
+    private final DBHelper helper;
     public TableViewDialog(String table, Context context) {
         this.context = context;
         this.table = table;
@@ -56,6 +56,7 @@ public class TableViewDialog extends DialogFragment {
         builder.setPositiveButton(R.string.ok, null);
         return builder.create();
     }
+
     final static String[] EMPTY = new String[]{"Nothing to show"};
     private String[] readTable() {
         final SQLiteDatabase database = helper.getReadableDatabase();
@@ -80,12 +81,11 @@ public class TableViewDialog extends DialogFragment {
                 strings[j] = builder.toString();
                 j++;
             } while (query.moveToNext());
-            database.close();
-            return strings;
         } else {
-            database.close();
-            return EMPTY;
+            strings = EMPTY;
         }
+        database.close();
+        return strings;
 
     }
 }

@@ -185,7 +185,7 @@ public class ReportEdit extends AppCompatActivity {
         adapter = new ReportFieldAdapter(context, R.layout.field_list_row, getSupportFragmentManager(), report, new CustomListener() {
             @Override
             public void onChange() {
-                save(false);
+                adapter.notifyDataSetChanged();
             }
         });
         final List<ReportField> fields = report.getFields();
@@ -232,7 +232,7 @@ public class ReportEdit extends AppCompatActivity {
             @Override
             public void onChange() {
                 updateDriverButtonValue();
-                save(false);
+//                save(false);
             }
         }).show(getSupportFragmentManager(), "Weight Dialog");
     }
@@ -245,7 +245,7 @@ public class ReportEdit extends AppCompatActivity {
                 @Override
                 public void onChange() {
                     updateNoteButton();
-                    save(false);
+//                    save(false);
                 }
             });
             noteEditDialog.show(getSupportFragmentManager(), "Notes Dialog");
@@ -274,7 +274,7 @@ public class ReportEdit extends AppCompatActivity {
                     @Override
                     public void onChange() {
                         calculateExpenses();
-                        save(false);
+//                        save(false);
                     }
                 }, getResources().getString(R.string.expenses_title));
                 expensesDialog.show(getSupportFragmentManager(), "Expenses Dialog");
@@ -291,7 +291,7 @@ public class ReportEdit extends AppCompatActivity {
                     @Override
                     public void onChange() {
                         calculateFare();
-                        save(false);
+//                        save(false);
                     }
                 }, getResources().getString(R.string.fares));
                 fareDialog.show(getSupportFragmentManager(), "Fare Dialog");
@@ -413,8 +413,6 @@ public class ReportEdit extends AppCompatActivity {
             }
         });
         updateDriverButtonValue();
-//        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -469,7 +467,7 @@ public class ReportEdit extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         final int itemId = item.getItemId();
         if(itemId == R.id.save){
-            save(true);
+            save();
         } else if (itemId == R.id.cancel){
             onBackPressed();
         } else if (itemId == R.id.done){
@@ -491,16 +489,11 @@ public class ReportEdit extends AppCompatActivity {
         boolean emptyFields = report.getFields().size() == 0;
 
         if (emptyRoute || emptyLeave || emptyFields){
-            final ReportNotCompletedDialog dialog = new ReportNotCompletedDialog(false, emptyRoute, emptyLeave, emptyFields);
-            dialog.show(getSupportFragmentManager(), "NoNoNo");
+            final ReportNotCompletedDialog dialog = new ReportNotCompletedDialog(emptyRoute, emptyLeave, emptyFields);
+            dialog.show(getSupportFragmentManager(), null);
         } else {
-            DoneReportDialog drd = new DoneReportDialog(getLayoutInflater(), report, new CustomListener() {
-                @Override
-                public void onChange() {
-                save(true);
-                }
-            });
-            drd.show(getSupportFragmentManager(), "Done dialog");
+            DoneReportDialog drd = new DoneReportDialog(getLayoutInflater(), report, (CustomListener) this::save);
+            drd.show(getSupportFragmentManager(), null);
         }
     }
 
@@ -509,20 +502,13 @@ public class ReportEdit extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    void save(boolean redirect){
+    void save(){
         reportUtil.saveReport(report);
         onActiveReport.updateNotification(report);
 
-        if (redirect) {
-            final Context context = getApplicationContext();
-            Intent intent = new Intent(context, Reports.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        } else {
-            final List<ReportField> fields = report.getFields();
-            Collections.sort(fields);
-            adapter.clear();
-            adapter.addAll(fields);
-        }
+        final Context context = getApplicationContext();
+        Intent intent = new Intent(context, Reports.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
     }
 }

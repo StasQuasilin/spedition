@@ -153,6 +153,6 @@ public class ReportFieldAdapter extends ArrayAdapter<ReportField> {
                 customListener.onChange();
             }
         });
-        editDialog.show(fragmentManager, "Edit Field");
+        editDialog.show(fragmentManager, null);
     }
 }

@@ -77,69 +77,47 @@ public class DBUtil {
 
         Log.i(TAG, data.toString());
         sendJson(ApiLinks.SYNC_REFERENCES,
-            new JSONObject(data), new Response.Listener<JSONObject>() {
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void onResponse(JSONObject response) {
-                try {
-                    final String status = response.getString(Keys.STATUS);
-                    if (status.equals(Keys.SUCCESS)){
-                        final JSONArray products = response.getJSONArray(Keys.PRODUCTS);
-                        if (products.length() > 0) {
-                            load(R.string.sync_products, products, new Loader() {
-                                @Override
-                                public void load(int id) {
-                                    syncProducts(id, db);
-                                }
-                            });
-                            updateLastSync(Tables.PRODUCTS, db);
-                        }
-                        final JSONArray drivers = response.getJSONArray(Keys.DRIVERS);
-                        if (drivers.length() > 0){
-                            load(R.string.sync_drivers, drivers, new Loader() {
-                                @Override
-                                public void load(int id) {
-                                    syncDrivers(id, db);
-                                }
-                            });
-                            updateLastSync(Tables.DRIVERS, db);
-                        }
-                        if(response.has(Keys.COUNTERPARTY)){
-                            final JSONArray counterparty = response.getJSONArray(Keys.COUNTERPARTY);
-
-                            final int length = counterparty.length();
-                            if (length > 0){
-                                load(R.string.sync_counterparty, counterparty, new Loader() {
-                                    @Override
-                                    public void load(int id) {
-                                        syncCounterparty(id, db);
-                                    }
-                                });
-                                updateLastSync(Tables.COUNTERPARTY, db);
-                            }
-                        }
-                        Toast.makeText(context, R.string.sync_success, Toast.LENGTH_LONG).show();
-                        db.close();
-                        onDone.done();
+            new JSONObject(data), response -> {
+            try {
+                final String status = response.getString(Keys.STATUS);
+                if (status.equals(Keys.SUCCESS)){
+                    final JSONArray products = response.getJSONArray(Keys.PRODUCTS);
+                    if (products.length() > 0) {
+                        load(R.string.sync_products, products, id -> syncProducts(id, db));
+                        updateLastSync(Tables.PRODUCTS, db);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    final String msg = context.getResources().getString(R.string.json_error) + " " + e.getMessage();
-                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                    final JSONArray drivers = response.getJSONArray(Keys.DRIVERS);
+                    if (drivers.length() > 0){
+                        load(R.string.sync_drivers, drivers, id -> syncDrivers(id, db));
+                        updateLastSync(Tables.DRIVERS, db);
+                    }
+                    if(response.has(Keys.COUNTERPARTY)){
+                        final JSONArray counterparty = response.getJSONArray(Keys.COUNTERPARTY);
+
+                        final int length = counterparty.length();
+                        if (length > 0){
+                            load(R.string.sync_counterparty, counterparty, id -> syncCounterparty(id, db));
+                            updateLastSync(Tables.COUNTERPARTY, db);
+                        }
+                    }
+                    Toast.makeText(context, R.string.sync_success, Toast.LENGTH_LONG).show();
                     db.close();
                     onDone.done();
                 }
-                updateData(response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    final String msg = context.getResources().getString(R.string.sync_error) + " " + error.getMessage();
-                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-                    db.close();
-                    onDone.done();
-                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                final String msg = context.getResources().getString(R.string.json_error) + " " + e.getMessage();
+                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                db.close();
+                onDone.done();
+            }
+//                updateData(response);
+            }, error -> {
+                error.printStackTrace();
+                final String msg = context.getResources().getString(R.string.sync_error) + " " + error.getMessage();
+                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                db.close();
+                onDone.done();
             });
     }
 
@@ -150,11 +128,15 @@ public class DBUtil {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        long versionCode;
+        long versionCode = -1;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-            versionCode = pInfo.getLongVersionCode();
+            if (pInfo != null) {
+                versionCode = pInfo.getLongVersionCode();
+            }
         } else {
-            versionCode = pInfo.versionCode;
+            if (pInfo != null) {
+                versionCode = pInfo.versionCode;
+            }
         }
         return versionCode;
     }
@@ -373,5 +355,15 @@ public class DBUtil {
             return cursor.getString(timeColIndex);
         }
         return null;
+    }
+
+    public void getReports(OnDone onDone) {
+        sendJson(ApiLinks.GET_REPORTS, new JSONObject(), response -> {
+            System.out.println(response);
+            onDone.done();
+        }, error -> {
+            onDone.done();
+        });
+
     }
 }

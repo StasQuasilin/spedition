@@ -14,4 +14,5 @@ public interface ApiLinks {
     String GET_COUNTERPARTY = HOME + API + "/get/counterparty";
     String REPORT_REMOVE = HOME + API + "/report/remove";
     String PING = HOME + "/ping";
+    String GET_REPORTS = HOME + API + "/reports";
 }

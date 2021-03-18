@@ -14,7 +14,6 @@ public class User extends JsonAble{
     private User supervisor;
     private Person person;
     private Role role;
-
     private String appVersion;
 
     @Id
@@ -70,8 +69,6 @@ public class User extends JsonAble{
         return json;
     }
 
-
-
     @Override
     public int hashCode() {
         return id;
@@ -81,4 +78,10 @@ public class User extends JsonAble{
     public boolean equals(Object obj) {
         return getClass() == obj.getClass() && hashCode() == obj.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return person.getValue();
+    }
 }
+

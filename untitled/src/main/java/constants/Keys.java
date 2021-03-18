@@ -92,4 +92,8 @@ public interface Keys {
     String UPDATE = "update";
     String REMOVE = "remove";
     String VERSION = "version";
+    String MODIFY = "modify";
+    String LATITUDE = "latitude";
+    String LONGITUDE = "longitude";
+    String LOCATIONS = "locations";
 }

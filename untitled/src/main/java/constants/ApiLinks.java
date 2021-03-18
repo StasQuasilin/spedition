@@ -17,4 +17,6 @@ public interface ApiLinks {
     String ACTIVE_REPORTS = API + "/active/reports";
     String PING = "/ping";
     String USER_DELETE = API + "/user/delete";
+    String SAVE_LOCATION = API + "/save/location";
+    String SAVE_LOCATIONS = API + "/save/locations";
 }

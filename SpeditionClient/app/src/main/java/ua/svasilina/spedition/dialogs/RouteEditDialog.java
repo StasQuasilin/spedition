@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +50,34 @@ public class RouteEditDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final View view = inflater.inflate(R.layout.route_edit, null);
         pointEdit = view.findViewById(R.id.editRoute);
+        pointEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (before < count) {
+                    final int  index = start + before;
+                    final char charAt = s.charAt(index);
+                    if (!Character.isAlphabetic(charAt) && !Character.isSpaceChar(charAt)){
+                        final CharSequence sequence = s.subSequence(0, index);
+                        final CharSequence other = (index < s.length() ? s.subSequence(index + 1, s.length()) :null);
+                        pointEdit.setText(sequence);
+                        save();
+                        if(other != null) {
+                            pointEdit.setText(other);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         adapter = new SimpleListAdapter<>(context, R.layout.simple_list_item_d, new AdapterItemEditInterface<String>() {
             @Override
@@ -85,12 +115,7 @@ public class RouteEditDialog extends DialogFragment {
                 customListener.onChange();
             }
         });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
+        builder.setNegativeButton(R.string.cancel, null);
 
         builder.setView(view);
         return builder.create();

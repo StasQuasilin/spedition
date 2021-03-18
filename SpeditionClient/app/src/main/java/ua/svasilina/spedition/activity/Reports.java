@@ -16,15 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import ua.svasilina.spedition.R;
 import ua.svasilina.spedition.adapters.ReportListAdapter;
+import ua.svasilina.spedition.dialogs.AlertActiveReportDialog;
 import ua.svasilina.spedition.dialogs.LoginDialog;
-import ua.svasilina.spedition.entity.OldReport;
-import ua.svasilina.spedition.entity.reports.Report;
 import ua.svasilina.spedition.entity.reports.SimpleReport;
-import ua.svasilina.spedition.utils.OldReportsUtil;
 import ua.svasilina.spedition.utils.background.BackgroundWorkerUtil;
 import ua.svasilina.spedition.utils.db.SqLiteReportUtil;
 
@@ -34,6 +31,7 @@ public class Reports extends AppCompatActivity {
     private long backPressedTime;
     private Toast backToast;
     private boolean haveActive = false;
+    private String activeReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +39,8 @@ public class Reports extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final Context context = getApplicationContext();
 
-        OldReportsUtil oldReportsUtil = new OldReportsUtil(context);
-
         SqLiteReportUtil reportUtil = new SqLiteReportUtil(context);
-        final List<OldReport> oldReports = oldReportsUtil.readStorage();
 
-        if (oldReports.size() > 0){
-            for (OldReport r : oldReports){
-                reportUtil.saveReport(new Report(r));
-                oldReportsUtil.removeReport(r.getUuid());
-            }
-        }
         final LinkedList<SimpleReport> reportsList = reportUtil.getReports();
         reports.addAll(reportsList);
         ReportListAdapter adapter = new ReportListAdapter(context, R.layout.report_list_row, this.reports);
@@ -59,9 +48,16 @@ public class Reports extends AppCompatActivity {
         if (view != null){
             view.setAdapter(adapter);
         }
-        for (SimpleReport report : reportsList){
+        checkActives();
+    }
+
+    private void checkActives(){
+        haveActive = false;
+        activeReport = null;
+        for (SimpleReport report : reports){
             haveActive = report.isActive();
             if(haveActive){
+                activeReport = report.getUuid();
                 break;
             }
         }
@@ -71,8 +67,6 @@ public class Reports extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main_menu, menu);
-        final MenuItem addItem = menu.findItem(R.id.add);
-        addItem.setVisible(!haveActive);
 
         try {
             PackageInfo pInfo = getApplicationContext().getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -95,7 +89,11 @@ public class Reports extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if(itemId == R.id.add){
-            newItem();
+            if (haveActive){
+                new AlertActiveReportDialog(getApplicationContext(), activeReport).show(getSupportFragmentManager(), null);
+            } else {
+                newItem();
+            }
         } else if (itemId == R.id.login){
             showLoginDialog();
         } else if (itemId == R.id.versionCode){

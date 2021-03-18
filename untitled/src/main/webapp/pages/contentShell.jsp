@@ -31,10 +31,8 @@
     </script>
 </head>
     <body style="background-color: #d3f9d3;">
-        <div id="modalLayer" class="modal-layer">
-
-        </div>
-        <div style="padding: 8px">
+        <div id="modalLayer" class="modal-layer"></div>
+        <div style="width: 100%; height: 100%">
             <div class="menu-holder">
                 <jsp:include page="menu.jsp"/>
             </div>

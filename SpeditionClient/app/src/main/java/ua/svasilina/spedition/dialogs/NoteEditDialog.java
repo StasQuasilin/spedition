@@ -134,6 +134,9 @@ public class NoteEditDialog extends DialogFragment {
         final String noteText = noteEdit.getText().toString();
         if (!noteText.isEmpty()){
             ReportNote note = null;
+            if (currentItem > adapter.getCount() - 1){
+                currentItem = -1;
+            }
             if (currentItem != -1){
                 note = adapter.getItem(currentItem);
             }

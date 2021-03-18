@@ -36,67 +36,39 @@
         <tr>
             <td colspan="2">
                 <fmt:message key="driver"/>:<br>
-                <div style="padding-left: 16px">
-                    <c:forEach items="${report.details}" var="detail">
-                    <div>
-                        ${detail.driver.person.value}
-                        <c:if test="${not empty detail.weight}">
-                            <c:set var="haveOwnWeight" value="true"/>
-                        </c:if>
-                    </div>
-                    </c:forEach>
-                </div>
             </td>
         </tr>
-        <c:if test="${haveOwnWeight}">
-            <tr>
-                <td colspan="2">
-                    <ft:message key="own.weight"/>
-                </td>
-            </tr>
-            <c:forEach items="${report.details}" var="detail">
-                <tr>
-                    <td style="text-align: right">
-                        ${detail.driver.person.value}
-                    </td>
-                    <td>
-                        ${detail.weight.gross} - ${detail.weight.tare} = ${detail.weight.gross-detail.weight.tare}
-                    </td>
-                </tr>
-            </c:forEach>
-        </c:if>
-        <c:if test="${not empty report.weight}">
-            <tr>
-                <td style="vertical-align: top">
-                    <fmt:message key="weight.base"/>
-                </td>
-                <td>
-                    <div>
-                        <fmt:message key="weight.gross"/>:
-                        <fmt:formatNumber value="${report.weight.gross}"/>
-                    </div>
-                    <div>
-                        <fmt:message key="weight.tare"/>:
-                        <fmt:formatNumber value="${report.weight.tare}"/>
-                    </div>
-                    <div>
-                        <fmt:message key="weight.net"/>:
-                        <fmt:formatNumber value="${report.weight.net()}"/>
-                    </div>
-                </td>
-            </tr>
-        </c:if>
+        <c:forEach items="${report.details}" var="detail">
         <tr>
-            <td style="vertical-align: top">
+            <td>
+                <div style="padding-left: 16px">
+                    <div>
+                        ${detail.driver.person.value}
+                    </div>
+                </div>
+            </td>
+            <td>
+                <c:if test="${detail.weight.gross-detail.weight.tare ne 0}">
+                    <fmt:formatNumber value="${detail.weight.gross}"/>
+                    -
+                    <fmt:formatNumber value="${detail.weight.tare}"/>
+                    =
+                    <fmt:formatNumber value="${detail.weight.gross-detail.weight.tare}"/>
+                </c:if>
+            </td>
+        </tr>
+        </c:forEach>
+        <tr>
+            <td>
+                <fmt:message key="date.leave"/>
+            </td>
+            <td>
+                <fmt:formatDate value="${report.leaveTime}" pattern="dd.MM.yyyy hh:mm"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="vertical-align: top">
                 <table>
-                    <tr>
-                        <td>
-                            <fmt:message key="date.leave"/>
-                        </td>
-                        <td>
-                            <fmt:formatDate value="${report.leaveTime}" pattern="dd.MM.yyyy hh:mm"/>
-                        </td>
-                    </tr>
                     <tr>
                         <td colspan="2" style="max-height: 200pt; padding-left: 8pt">
                             <div>
@@ -172,14 +144,15 @@
                                                         </td>
                                                         <td>
                                                             <c:set var="counterpartyWeight" value="${detail.counterpartyWeight[field.uuid]}"/>
-                                                            ${counterpartyWeight.gross} - ${counterpartyWeight.tare} = ${counterpartyWeight.gross-counterpartyWeight.tare}
+                                                            <fmt:formatNumber value="${counterpartyWeight.gross}"/>
+                                                            -
+                                                            <fmt:formatNumber value="${counterpartyWeight.tare}"/>
+                                                            =
+                                                            <fmt:formatNumber value="${counterpartyWeight.gross-counterpartyWeight.tare}"/>
                                                         </td>
                                                     </tr>
                                                 </c:if>
-
                                             </c:forEach>
-
-
                                         </c:if>
                                         <tr>
                                             <td colspan="2" style="border-bottom: solid gray 1pt; "></td>
