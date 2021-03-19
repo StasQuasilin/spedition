@@ -96,4 +96,5 @@ public interface Keys {
     String LATITUDE = "latitude";
     String LONGITUDE = "longitude";
     String LOCATIONS = "locations";
+    String SPEED = "speed";
 }

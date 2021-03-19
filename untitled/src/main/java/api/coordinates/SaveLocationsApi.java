@@ -31,7 +31,7 @@ public class SaveLocationsApi extends ServletAPI {
         final JSONObject body = parseBody(req);
         Answer answer;
         if (body != null){
-            int report = Integer.parseInt(String.valueOf(body.get(REPORT)));
+            String report = String.valueOf(body.get(REPORT));
             for (Object o : (JSONArray)body.get(Keys.LOCATIONS)){
                 Location location = new Location();
                 location.setReport(report);

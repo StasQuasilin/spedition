@@ -93,7 +93,7 @@ public class SaveReportAPI extends ServletAPI {
             int perDiem = Integer.parseInt(String.valueOf(body.get(PER_DIEM)));
             report.setPerDiem(perDiem);
             if (body.containsKey(Keys.MODIFY)){
-                Timestamp modify = Timestamp.valueOf(String.valueOf(body.get(MODIFY)));
+                Timestamp modify = new Timestamp(Long.parseLong(String.valueOf(body.get(MODIFY))));
                 report.setModify(modify);
             }
             reportDAO.save(report);

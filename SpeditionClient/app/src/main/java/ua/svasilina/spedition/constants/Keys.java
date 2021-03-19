@@ -81,4 +81,5 @@ public interface Keys {
     String UPDATE = "update";
     String VERSION = "version";
     String MODIFY = "modify";
+    String SPEED = "speed";
 }

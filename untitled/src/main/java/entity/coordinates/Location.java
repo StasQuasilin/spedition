@@ -7,10 +7,11 @@ import java.sql.Timestamp;
 @Table(name = "locations")
 public class Location {
     private int id;
-    private int report;
+    private String report;
     private Timestamp timestamp;
-    private long latitude;
-    private long longitude;
+    private float latitude;
+    private float longitude;
+    private float speed;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +25,10 @@ public class Location {
 
     @Basic
     @Column(name = "_report")
-    public int getReport() {
+    public String getReport() {
         return report;
     }
-    public void setReport(int report) {
+    public void setReport(String report) {
         this.report = report;
     }
 
@@ -42,19 +43,28 @@ public class Location {
 
     @Basic
     @Column(name = "_latitude")
-    public long getLatitude() {
+    public float getLatitude() {
         return latitude;
     }
-    public void setLatitude(long latitude) {
+    public void setLatitude(float latitude) {
         this.latitude = latitude;
     }
 
     @Basic
     @Column(name = "_longitude")
-    public long getLongitude() {
+    public float getLongitude() {
         return longitude;
     }
-    public void setLongitude(long longitude) {
+    public void setLongitude(float longitude) {
         this.longitude = longitude;
+    }
+
+    @Basic
+    @Column(name = "_speed")
+    public float getSpeed() {
+        return speed;
+    }
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 }

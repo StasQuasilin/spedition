@@ -30,10 +30,11 @@ public class SaveLocationApi extends ServletAPI {
         Answer answer;
         if (body != null){
             Location location = new Location();
-            location.setReport(Integer.parseInt(String.valueOf(body.get(Keys.REPORT))));
-            location.setTimestamp(Timestamp.valueOf(String.valueOf(body.get(TIME))));
-            location.setLatitude(Long.parseLong(String.valueOf(body.get(Keys.LATITUDE))));
-            location.setLongitude(Long.parseLong(String.valueOf(body.get(Keys.LONGITUDE))));
+            location.setReport(String.valueOf(body.get(Keys.REPORT)));
+            location.setTimestamp(new Timestamp(Long.parseLong(String.valueOf(body.get(TIME)))));
+            location.setLatitude(Float.parseFloat(String.valueOf(body.get(Keys.LATITUDE))));
+            location.setLongitude(Float.parseFloat(String.valueOf(body.get(Keys.LONGITUDE))));
+            location.setSpeed(Float.parseFloat(String.valueOf(body.get(Keys.SPEED))));
             hibernator.save(location);
             answer = new SuccessAnswer();
         } else {

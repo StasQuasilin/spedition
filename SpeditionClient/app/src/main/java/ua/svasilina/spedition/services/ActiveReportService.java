@@ -13,11 +13,16 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import ua.svasilina.spedition.R;
 import ua.svasilina.spedition.activity.ReportEdit;
 import ua.svasilina.spedition.activity.Reports;
 import ua.svasilina.spedition.constants.Keys;
 import ua.svasilina.spedition.utils.background.BackgroundWorkerUtil;
+import ua.svasilina.spedition.utils.location.LocationRegistrator;
+import ua.svasilina.spedition.utils.location.LocationUtil;
 
 import static ua.svasilina.spedition.constants.Keys.ID;
 import static ua.svasilina.spedition.constants.Keys.UUID;
@@ -27,6 +32,9 @@ public class ActiveReportService extends Service {
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
     private static final String CHANNEL_NAME = "Foreground Service Channel";
     public static final int NOTIFICATION_ID = 100200300;
+    private static final int LOCATION_PERIOD = 10 * 1000;
+    private LocationUtil locationUtil;
+    private Timer locationTimer;
 
     @Nullable
     @Override
@@ -45,6 +53,7 @@ public class ActiveReportService extends Service {
         }
 
         final Context context = getApplicationContext();
+        locationUtil = new LocationUtil(context);
         BackgroundWorkerUtil.getInstance().runWorker(context);
 
         Intent editIntent = new Intent();
@@ -67,17 +76,25 @@ public class ActiveReportService extends Service {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build();
         startForeground(NOTIFICATION_ID, notification);
-//        Timer timer = new Timer();
-//        final TimerTask timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                //todo location service - fix location
-//                Log.i("Background", "is alive");
-//            }
-//        };
-//        timer.schedule(timerTask, 0, 1000);
+        locationTimer = new Timer();
+        LocationRegistrator registrator = new LocationRegistrator(context, uuid);
+        final TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                locationUtil.getLastLocation(registrator);
+            }
+        };
+        locationTimer.schedule(timerTask, 0, LOCATION_PERIOD);
 
         return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (locationTimer != null){
+            locationTimer.cancel();
+        }
     }
 
     private void createNotificationChannel() {

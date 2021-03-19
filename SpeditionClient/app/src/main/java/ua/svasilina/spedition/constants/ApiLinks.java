@@ -15,4 +15,5 @@ public interface ApiLinks {
     String REPORT_REMOVE = HOME + API + "/report/remove";
     String PING = HOME + "/ping";
     String GET_REPORTS = HOME + API + "/reports";
+    String SAVE_LOCATION = HOME + API + "/save/location";
 }
