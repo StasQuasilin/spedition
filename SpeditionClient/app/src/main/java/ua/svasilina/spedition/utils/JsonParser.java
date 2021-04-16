@@ -1,5 +1,6 @@
 package ua.svasilina.spedition.utils;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -17,6 +18,15 @@ public class JsonParser {
         try {
             JSONObject json = (JSONObject) parser.parse(data);
             return new JsonObject(json);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public JSONArray parseArray(String data){
+        try {
+            return (JSONArray)parser.parse(data);
         } catch (ParseException e) {
             e.printStackTrace();
         }

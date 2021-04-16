@@ -1,11 +1,11 @@
 package ua.svasilina.spedition.constants;
 
 public interface ApiLinks {
-    String ADDRESS = "134.249.155.33:32332";
-//    String ADDRESS = "10.10.10.45:3322";
+//    String ADDRESS = "134.249.155.33:32332";
+//    String ADDRESS = "91.222.16.30";
+    String ADDRESS = "10.10.10.201:3322";
     String HOME = "http://" + ADDRESS + "/spedition";
     String LOGIN = HOME + "/sign/in";
-
     String API = "/api/v1";
     String REPORT_SAVE = HOME + API+ "/report/save";
     String SYNC_REFERENCES = HOME + API + "/sync/references";

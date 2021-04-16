@@ -31,7 +31,7 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
-    <data-source name="spedition_db@134.249.155.33" uuid="3e171565-057c-41b0-8f08-61640ebea0bd">
+    <data-source name="spedition_db@10.10.10.201" uuid="3e171565-057c-41b0-8f08-61640ebea0bd">
       <database-info product="PostgreSQL" version="11.8" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.2.5" dbms="POSTGRES" exact-version="11.8" exact-driver-version="42.2">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>

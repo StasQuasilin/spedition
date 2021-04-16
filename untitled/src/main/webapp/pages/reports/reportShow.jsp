@@ -264,13 +264,22 @@
                 </tr>
             </table>
             <div>
+                <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+                <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
                 <script src="https://unpkg.com/@googlemaps/js-api-loader@1.0.0/dist/index.min.js"></script>
                 <script src="${context}/vue/gm.vue?v=${now}"></script>
                 <script src="${context}/vue/gmView.vue?v=${now}"></script>
-                <div id="gm" >
-                    <google-map :apikey="apiKey" :container="container" :config="mapConfig" ></google-map>
-                    <div style="width: 400pt; height: 300pt; background-color: lightgreen" ref="googleMap"></div>
-                </div>
+                <div id='map' style='width: 400px; height: 400px;'></div>
+                <script>
+                    mapboxgl.accessToken = 'pk.eyJ1Ijoic3Rhc3Zhc2lsaW4iLCJhIjoiY2tta2N2dWIyMDI1ZzJwcnowanNycXRrbyJ9.PACaqly3EmrBhdnqOHWo-g';
+                    map = new mapboxgl.Map({
+                        container: 'map',
+                        style: 'mapbox://styles/mapbox/streets-v11',
+                        center: [34.9475, 50.861816],
+                        zoom: 14,
+                        language:'ru'
+                    });
+                </script>
             </div>
         </div>
     </body>

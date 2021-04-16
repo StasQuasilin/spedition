@@ -98,6 +98,11 @@ public class Reports extends AppCompatActivity {
             showLoginDialog();
         } else if (itemId == R.id.versionCode){
             showTables();
+        } else if(itemId == R.id.location){
+            final Context context = getApplicationContext();
+            Intent intent = new Intent(context, LocationActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -82,4 +82,7 @@ public interface Keys {
     String VERSION = "version";
     String MODIFY = "modify";
     String SPEED = "speed";
+    String DATA = "data";
+    String CODE = "code";
+    String MESSAGE = "message";
 }

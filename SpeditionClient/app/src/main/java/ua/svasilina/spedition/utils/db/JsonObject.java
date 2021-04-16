@@ -86,4 +86,8 @@ public class JsonObject {
     public JSONObject getOriginJson() {
         return json;
     }
+
+    public double getDouble(String key) {
+        return Double.parseDouble(getString(key));
+    }
 }

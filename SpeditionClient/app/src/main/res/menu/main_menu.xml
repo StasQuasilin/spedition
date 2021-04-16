@@ -22,4 +22,8 @@
         android:id="@+id/versionCode"
         android:title=""
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/location"
+        android:title="@string/location"
+        app:showAsAction="never"/>
 </menu>

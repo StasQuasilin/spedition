@@ -122,4 +122,5 @@
     <string name="alert">Alert</string>
     <string name="open_report">Відкрити звіт</string>
     <string name="points">Точки відвантаження</string>
+    <string name="location">Location</string>
 </resources>

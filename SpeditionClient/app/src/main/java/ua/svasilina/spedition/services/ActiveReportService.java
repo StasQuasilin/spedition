@@ -32,9 +32,10 @@ public class ActiveReportService extends Service {
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
     private static final String CHANNEL_NAME = "Foreground Service Channel";
     public static final int NOTIFICATION_ID = 100200300;
-    private static final int LOCATION_PERIOD = 10 * 1000;
+    private static final int LOCATION_PERIOD = 200 * 60 * 1000;
     private LocationUtil locationUtil;
     private Timer locationTimer;
+    private LocationRegistrator registrator;
 
     @Nullable
     @Override
@@ -77,7 +78,7 @@ public class ActiveReportService extends Service {
                 .build();
         startForeground(NOTIFICATION_ID, notification);
         locationTimer = new Timer();
-        LocationRegistrator registrator = new LocationRegistrator(context, uuid);
+        registrator = new LocationRegistrator(context, uuid);
         final TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -94,6 +95,7 @@ public class ActiveReportService extends Service {
         super.onDestroy();
         if (locationTimer != null){
             locationTimer.cancel();
+            registrator.stop();
         }
     }
 
